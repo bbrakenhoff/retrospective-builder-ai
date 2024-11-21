@@ -1,51 +1,79 @@
-import { Component, signal, effect, OnInit } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 type Theme = 'light' | 'dark' | 'system';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './sidebar.component.html'
+	selector: 'app-sidebar',
+	standalone: true,
+	imports: [CommonModule],
+	templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
-  public readonly siteName = 'Your Site Name';
-  public readonly isDarkMode = signal(false);
-  public readonly currentTheme = signal<Theme>('system');
-  public readonly isDropdownOpen = signal(false);
-  public readonly themes: Theme[] = ['light', 'dark', 'system'];
+	private static readonly LOCALSTORAGE_KEY = 'theme';
 
-  private systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+	public readonly siteName = 'Your Site Name';
+	public readonly isDarkMode = signal(false);
+	public readonly currentTheme = signal<Theme>('system');
+	public readonly isDropdownOpen = signal(false);
+	public readonly themes: Theme[] = ['light', 'dark', 'system'];
 
-  public ngOnInit() {
-    // Initial theme check
-    this.updateTheme();
+	private systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
-    // Listen for system theme changes
-    this.systemThemeMedia.addEventListener('change', () => {
-      if (this.currentTheme() === 'system') {
-        this.updateTheme();
-      }
-    });
-  }
+	public constructor() {
+		const savedTheme = this.getSavedTheme();
+		this.currentTheme.set(savedTheme);
+		this.updateTheme();
+	}
 
-  private updateTheme() {
-    const theme = this.currentTheme();
-    if (theme === 'system') {
-      this.isDarkMode.set(this.systemThemeMedia.matches);
-    } else {
-      this.isDarkMode.set(theme === 'dark');
-    }
-  }
+	public ngOnInit() {
+		this.systemThemeMedia.addEventListener('change', () => {
+			if (this.currentTheme() === 'system') {
+				this.updateTheme();
+			}
+		});
+	}
 
-  public setTheme(theme: Theme) {
-    this.currentTheme.set(theme);
-    this.isDropdownOpen.set(false);
-    this.updateTheme();
-  }
+	private getSavedTheme(): Theme {
+		try {
+			const savedTheme = localStorage.getItem(SidebarComponent.LOCALSTORAGE_KEY);
+			return (savedTheme === 'light' || savedTheme === 'dark' || savedTheme === 'system')
+				? savedTheme as Theme
+				: 'system';
+		} catch {
+			return 'system';
+		}
+	}
 
-  public toggleDropdown() {
-    this.isDropdownOpen.update(v => !v);
-  }
+	private saveTheme(theme: Theme) {
+		try {
+			localStorage.setItem(SidebarComponent.LOCALSTORAGE_KEY, theme);
+		} catch (error) {
+			console.error('Error saving theme:', error);
+		}
+	}
+
+	private updateTheme() {
+		const theme = this.currentTheme();
+		if (theme === 'system') {
+			this.isDarkMode.set(this.systemThemeMedia.matches);
+		} else {
+			this.isDarkMode.set(theme === 'dark');
+		}
+	}
+
+	public setTheme(theme: Theme) {
+		this.currentTheme.set(theme);
+		this.isDropdownOpen.set(false);
+		this.saveTheme(theme);
+		this.updateTheme();
+	}
+
+	public toggleDropdown() {
+		this.isDropdownOpen.update(v => !v);
+	}
+
+	public getThemeText(): string {
+		return this.currentTheme() || 'system';
+	}
 } 
