@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { RetrospectiveElementsComponent } from './components/retrospective/retrospective-elements.component';
+import { RetrospectiveElementsComponent } from './components/retrospective-elements/retrospective-elements.component';
 
 export const routes: Routes = [
   {
