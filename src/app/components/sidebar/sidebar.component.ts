@@ -1,12 +1,13 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SvgIconComponent } from 'angular-svg-icon';
 
 type Theme = 'light' | 'dark' | 'system';
 
 @Component({
 	selector: 'app-sidebar',
 	standalone: true,
-	imports: [CommonModule],
+	imports: [CommonModule, SvgIconComponent],
 	templateUrl: './sidebar.component.html'
 })
 export class SidebarComponent implements OnInit {
@@ -75,5 +76,14 @@ export class SidebarComponent implements OnInit {
 
 	public getThemeText(): string {
 		return this.currentTheme() || 'system';
+	}
+
+	public getThemeIcon(theme: Theme): string {
+		let iconName='system';
+
+		if(theme === 'light'){ iconName = 'sun';}
+		else if(theme==='dark'){ iconName = 'moon';}
+
+		return `assets/icon-${iconName}.svg`;
 	}
 } 

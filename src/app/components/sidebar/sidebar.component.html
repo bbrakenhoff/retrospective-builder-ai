@@ -15,19 +15,14 @@
   <div class="relative">
     <button 
       (click)="toggleDropdown()" 
-      class="bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 flex items-center justify-between p-3 rounded-lg text-neutral-700 dark:text-neutral-300 transition-colors w-full"
+      class="flex items-center p-3 w-full"
     >
-      <span class="flex items-center gap-3">
-        <span class="capitalize">Theme: {{ currentTheme() }}</span>
+      <span class="mr-2">
+        <svg-icon [src]="getThemeIcon(currentTheme())" [svgStyle]="{ 'width.px': 24 }"></svg-icon>
       </span>
-      <svg 
-        class="h-5 w-5" 
-        fill="none" 
-        stroke="currentColor" 
-        viewBox="0 0 24 24"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
+      <span class="flex items-center capitalize">
+        {{ currentTheme() }}
+      </span>
     </button>
 
     <!-- Dropdown menu -->
@@ -41,6 +36,9 @@
               [class.bg-neutral-100]="currentTheme() === theme"
               [class.dark:bg-neutral-700]="currentTheme() === theme"
             >
+            <span class="mr-2">
+              <svg-icon [src]="getThemeIcon(theme)" [svgStyle]="{ 'width.px': 24 }"></svg-icon>
+            </span>
               <span class="capitalize">{{ theme }}</span>
             </button>
           }
