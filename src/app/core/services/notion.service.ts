@@ -22,4 +22,11 @@ export class NotionService {
       })
     );
   }
+
+  public getRetrospectives$():Observable<any> {
+    return from(this.notion.databases.query({
+      database_id: environment.notion.databases.retrospectives
+    })
+  );
+  }
 } 
