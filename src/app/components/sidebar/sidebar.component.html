@@ -1,14 +1,12 @@
-<nav class="bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 border-r fixed flex flex-col h-screen justify-between p-4 w-[250px]">
+<nav class="fixed flex flex-col h-screen justify-between p-4 w-[250px] bg-white border-neutral-200 border-r dark:bg-neutral-900 dark:border-neutral-800">
   <!-- Top section -->
-  <div>
-    <div class="border-b border-neutral-200 dark:border-neutral-800 flex gap-4 items-center py-4">
+  <div class="flex flex-col items-center border-b border-neutral-200 dark:border-neutral-800">
       <img 
-        src="assets/logo.png" 
+        src="assets/logo-vault8.png" 
         alt="Logo" 
-        class="h-10 w-10"
+        class="block h-24 mb-6"
       />
-      <h1 class="font-semibold m-0 text-neutral-900 dark:text-neutral-50 text-xl">{{ siteName }}</h1>
-    </div>
+      <h1 class="font-semibold m-0 mb-4 text-center text-xl text-neutral-900 dark:text-neutral-50">{{ siteName }}</h1>
   </div>
 
   <!-- Theme switcher dropdown -->
@@ -20,19 +18,19 @@
       <span class="mr-2">
         <svg-icon [src]="getThemeIcon(currentTheme())" [svgStyle]="{ 'width.px': 24 }"></svg-icon>
       </span>
-      <span class="flex items-center capitalize">
+      <span class="capitalize flex items-center">
         {{ currentTheme() }}
       </span>
     </button>
 
     <!-- Dropdown menu -->
     @if (isDropdownOpen()) {
-      <div class="absolute bottom-full bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 mb-2 rounded-lg shadow-lg w-full">
+      <div class="absolute bg-white border border-neutral-200 bottom-full mb-2 rounded-lg shadow-lg w-full dark:bg-neutral-800 dark:border-neutral-700">
         <div class="p-1">
           @for (theme of themes; track theme) {
             <button 
               (click)="setTheme(theme)"
-              class="flex items-center gap-3 p-2 rounded w-full hover:bg-neutral-100 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300"
+              class="flex gap-3 items-center p-2 rounded text-neutral-700 w-full hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
               [class.bg-neutral-100]="currentTheme() === theme"
               [class.dark:bg-neutral-700]="currentTheme() === theme"
             >
