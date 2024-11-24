@@ -5,7 +5,7 @@ import { Retrospective } from '../models/retrospective.model';
   providedIn: 'root'
 })
 export class RetrospectiveAdapter {
-  public fromNotionResponse(notionResponse: any): Retrospective[] {
+  fromNotionResponse(notionResponse: any): Retrospective[] {
     if (!notionResponse?.results) {
       return [];
     }

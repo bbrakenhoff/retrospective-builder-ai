@@ -12,7 +12,7 @@ import { RetrospectiveAdapter } from '../adapters/retrospective.adapter';
 export class NotionService {
   private readonly notion: Client;
 
-  public constructor(
+  constructor(
     private readonly retrospectiveElementAdapter: RetrospectiveElementAdapter,
     private readonly retrospectiveAdapter: RetrospectiveAdapter
   ) {
@@ -21,7 +21,7 @@ export class NotionService {
     });
   }
 
-  public getRetrospectiveElements$(): Observable<RetrospectiveElement[]> {
+  getRetrospectiveElements$(): Observable<RetrospectiveElement[]> {
     return from(
       this.notion.databases.query({
         database_id: environment.notion.databases.retrospectiveElements
@@ -31,7 +31,7 @@ export class NotionService {
     );
   }
 
-  public getRetrospectives$(): Observable<any> {
+  getRetrospectives$(): Observable<any> {
     return from(this.notion.databases.query({
       database_id: environment.notion.databases.retrospectives
     })

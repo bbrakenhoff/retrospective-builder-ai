@@ -10,9 +10,9 @@ import { NotionService } from '../../core/services/notion.service';
 })
 export class RetrospectivesComponent {
 
-  public readonly retrospectives$;
+  readonly retrospectives$;
 
-  public constructor(private readonly notionService: NotionService) { 
+  constructor(private readonly notionService: NotionService) { 
     this.retrospectives$ = this.notionService.getRetrospectives$();
   }
 } 

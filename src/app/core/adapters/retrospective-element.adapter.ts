@@ -6,7 +6,7 @@ import { RetrospectiveElement } from '../models/retrospective-element.model';
 })
 export class RetrospectiveElementAdapter {
 
-  public fromNotionResponse(notionResponse: any): RetrospectiveElement[] {
+  fromNotionResponse(notionResponse: any): RetrospectiveElement[] {
     if (!notionResponse?.results) {
       return [];
     }

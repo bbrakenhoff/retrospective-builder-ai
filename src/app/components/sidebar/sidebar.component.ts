@@ -13,21 +13,21 @@ type Theme = 'light' | 'dark' | 'system';
 export class SidebarComponent implements OnInit {
 	private static readonly LOCALSTORAGE_KEY = 'theme';
 
-	public readonly siteName = 'Your Site Name';
-	public readonly isDarkMode = signal(false);
-	public readonly currentTheme = signal<Theme>('system');
-	public readonly isDropdownOpen = signal(false);
-	public readonly themes: Theme[] = ['light', 'dark', 'system'];
+	readonly siteName = 'Your Site Name';
+	readonly isDarkMode = signal(false);
+	readonly currentTheme = signal<Theme>('system');
+	readonly isDropdownOpen = signal(false);
+	readonly themes: Theme[] = ['light', 'dark', 'system'];
 
 	private systemThemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
-	public constructor() {
+	constructor() {
 		const savedTheme = this.getSavedTheme();
 		this.currentTheme.set(savedTheme);
 		this.updateTheme();
 	}
 
-	public ngOnInit() {
+	ngOnInit() {
 		this.systemThemeMedia.addEventListener('change', () => {
 			if (this.currentTheme() === 'system') {
 				this.updateTheme();
@@ -63,22 +63,22 @@ export class SidebarComponent implements OnInit {
 		}
 	}
 
-	public setTheme(theme: Theme) {
+	setTheme(theme: Theme) {
 		this.currentTheme.set(theme);
 		this.isDropdownOpen.set(false);
 		this.saveTheme(theme);
 		this.updateTheme();
 	}
 
-	public toggleDropdown() {
+	toggleDropdown() {
 		this.isDropdownOpen.update(v => !v);
 	}
 
-	public getThemeText(): string {
+	getThemeText(): string {
 		return this.currentTheme() || 'system';
 	}
 
-	public getThemeIcon(theme: Theme): string {
+	getThemeIcon(theme: Theme): string {
 		let iconName='system';
 
 		if(theme === 'light'){ iconName = 'sun';}
