@@ -1,44 +1,49 @@
 <p>dashboard works!</p>
 
 <div class="p-6">
-  <div class="overflow-x-auto rounded-lg shadow-md">
-    <table class="w-full bg-white text-left text-sm dark:bg-neutral-900">
-      <thead
-        class="border-b border-neutral-200 text-xs uppercase dark:border-neutral-700">
-        <tr>
-          <th class="px-6 py-3">Date</th>
-          <th class="px-6 py-3">Sprint</th>
-          <th class="px-6 py-3">Team</th>
-          <th class="px-6 py-3">Gather Data</th>
-          <th class="px-6 py-3">Generate Insights</th>
-          <th class="px-6 py-3">Decide What To Do</th>
-          <th class="px-6 py-3">Closing</th>
-        </tr>
-      </thead>
-      <tbody>
+  <div class="h-full">
+    <div class="overflow-x-auto">
+      <div class="flex gap-4 pb-4">
         @for (retro of pastRetrospectives$ | async; track retro.id) {
-          <tr
-            class="border-b border-neutral-700 bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-            <td class="px-6 py-4">
-              {{ retro.date?.toJSDate() | date: 'mediumDate' }}
-            </td>
-            <td class="px-6 py-4">{{ retro.sprint }}</td>
-            <td class="px-6 py-4">{{ retro.team }}</td>
-            <td class="px-6 py-4">
-              {{ retro.gatherDataElements[0] }}
-            </td>
-            <td class="px-6 py-4">
-              {{ retro.generateInsightsElements[0] }}
-            </td>
-            <td class="px-6 py-4">
-              {{ retro.decideWhatToDoElements[0] }}
-            </td>
-            <td class="px-6 py-4">
-              {{ retro.closingElements[0] }}
-            </td>
-          </tr>
+          <div
+            class="min-w-[300px] rounded-lg bg-white p-6 shadow-md dark:bg-neutral-900">
+            <div class="mb-4">
+              <div class="text-sm text-neutral-500 dark:text-neutral-400">
+                {{ retro.date?.toJSDate() | date: 'mediumDate' }}
+              </div>
+              <div class="text-lg font-semibold">Sprint {{ retro.sprint }}</div>
+              <div class="text-sm">Team {{ retro.team }}</div>
+            </div>
+
+            <div class="space-y-3">
+              <div>
+                <div class="text-xs font-medium uppercase text-neutral-500">
+                  Gather Data
+                </div>
+                <div>{{ retro.gatherDataElements[0] }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium uppercase text-neutral-500">
+                  Generate Insights
+                </div>
+                <div>{{ retro.generateInsightsElements[0] }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium uppercase text-neutral-500">
+                  Decide What To Do
+                </div>
+                <div>{{ retro.decideWhatToDoElements[0] }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium uppercase text-neutral-500">
+                  Closing
+                </div>
+                <div>{{ retro.closingElements[0] }}</div>
+              </div>
+            </div>
+          </div>
         }
-      </tbody>
-    </table>
+      </div>
+    </div>
   </div>
 </div>
