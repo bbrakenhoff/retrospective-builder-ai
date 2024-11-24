@@ -5,12 +5,12 @@ import { SvgIconComponent } from 'angular-svg-icon';
 type Theme = 'light' | 'dark' | 'system';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-navbar',
   standalone: true,
   imports: [CommonModule, SvgIconComponent],
-  templateUrl: './sidebar.component.html',
+  templateUrl: './navbar.component.html',
 })
-export class SidebarComponent implements OnInit {
+export class NavbarComponent implements OnInit {
   private static readonly LOCALSTORAGE_KEY = 'theme';
 
   readonly siteName = 'Vault8';
@@ -37,9 +37,7 @@ export class SidebarComponent implements OnInit {
 
   private getSavedTheme(): Theme {
     try {
-      const savedTheme = localStorage.getItem(
-        SidebarComponent.LOCALSTORAGE_KEY
-      );
+      const savedTheme = localStorage.getItem(NavbarComponent.LOCALSTORAGE_KEY);
       return savedTheme === 'light' ||
         savedTheme === 'dark' ||
         savedTheme === 'system'
@@ -52,7 +50,7 @@ export class SidebarComponent implements OnInit {
 
   private saveTheme(theme: Theme) {
     try {
-      localStorage.setItem(SidebarComponent.LOCALSTORAGE_KEY, theme);
+      localStorage.setItem(NavbarComponent.LOCALSTORAGE_KEY, theme);
     } catch (error) {
       console.error('Error saving theme:', error);
     }

@@ -1,10 +1,8 @@
-<div
-  [ngClass]="{ dark: sidebar.isDarkMode() }"
-  class="flex min-h-screen w-full">
+<div [ngClass]="{ dark: navbar.isDarkMode() }" class="flex min-h-screen w-full">
   <div
-    class="flex min-h-screen w-full bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50">
-    <app-sidebar #sidebar />
-    <main class="ml-[250px] flex-1 p-8">
+    class="flex min-h-screen w-full bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-50">
+    <app-navbar #navbar />
+    <main class="flex-1 p-8">
       <router-outlet />
     </main>
   </div>
