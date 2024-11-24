@@ -25,12 +25,20 @@ export class RetrospectiveService {
     const today = DateTime.now().startOf('day');
     return this.all$().pipe(
       map(retrospectives =>
-        retrospectives
+        (retrospectives ?? [])
           .filter(
             retrospective =>
               retrospective.date && retrospective.date.startOf('day') < today
           )
           .sort((a, b) => (b.date?.toMillis() ?? 0) - (a.date?.toMillis() ?? 0))
+      )
+    );
+  }
+
+  unplannedRetrospectives$(): Observable<Retrospective[]> {
+    return this.all$().pipe(
+      map(retrospectives =>
+        (retrospectives ?? []).filter(retrospective => !retrospective.date)
       )
     );
   }

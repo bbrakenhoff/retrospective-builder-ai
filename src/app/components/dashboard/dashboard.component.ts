@@ -12,13 +12,18 @@ import { RetrospectiveCardsComponent } from './retrospective-cards/retrospective
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  isLoading$!: Observable<boolean>;
+  isLoading = false;
+  unplannedRetrospectives$!: Observable<Retrospective[]>;
   pastRetrospectives$!: Observable<Retrospective[]>;
 
   constructor(private readonly retrospectiveService: RetrospectiveService) {}
 
   ngOnInit(): void {
-    this.isLoading$ = this.retrospectiveService.isLoading$;
+    this.retrospectiveService.isLoading$.subscribe({
+      next: isLoading => (this.isLoading = isLoading),
+    });
+    this.unplannedRetrospectives$ =
+      this.retrospectiveService.unplannedRetrospectives$();
     this.pastRetrospectives$ = this.retrospectiveService
       .pastRetrospectives$()
       .pipe(map(retrospectives => retrospectives.slice(0, 5).slice(0, 5)));

@@ -1,7 +1,15 @@
-@if (pastRetrospectives$ | async; as retrospectives) {
-  <app-retrospective-cards
-    heading="Most recent retrospectives"
-    [retrospectives]="retrospectives" />
+@if (!isLoading) {
+  @if (unplannedRetrospectives$ | async; as unplannedRetros) {
+    <app-retrospective-cards
+      heading="Unplanned retrospectives"
+      [retrospectives]="unplannedRetros" />
+  }
+
+  @if (pastRetrospectives$ | async; as pastRetros) {
+    <app-retrospective-cards
+      heading="Most recent retrospectives"
+      [retrospectives]="pastRetros" />
+  }
 } @else {
   <div class="flex justify-center">Even wachten...</div>
 }
