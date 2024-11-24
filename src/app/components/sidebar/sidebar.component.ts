@@ -13,7 +13,7 @@ type Theme = 'light' | 'dark' | 'system';
 export class SidebarComponent implements OnInit {
 	private static readonly LOCALSTORAGE_KEY = 'theme';
 
-	readonly siteName = 'Your Site Name';
+	readonly siteName = 'Vault8';
 	readonly isDarkMode = signal(false);
 	readonly currentTheme = signal<Theme>('system');
 	readonly isDropdownOpen = signal(false);
