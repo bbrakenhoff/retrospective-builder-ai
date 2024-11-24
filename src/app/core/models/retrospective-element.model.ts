@@ -12,4 +12,4 @@ export interface RetrospectiveElement {
   latestUseTeam: string | null;
   usedInTeams: string[];
   usedOnDates: Date[];
-} 
+}

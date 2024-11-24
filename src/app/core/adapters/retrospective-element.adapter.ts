@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { RetrospectiveElement } from '../models/retrospective-element.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RetrospectiveElementAdapter {
-
   fromNotionResponse(notionResponse: any): RetrospectiveElement[] {
     if (!notionResponse?.results) {
       return [];
@@ -25,12 +24,18 @@ export class RetrospectiveElementAdapter {
       phase: this.extractMultiSelect(properties.Phase?.multi_select)?.[0] || '',
       name: this.extractText(properties.Name?.title?.[0]?.plain_text),
       link: this.extractText(properties.Link?.rich_text?.[0]?.plain_text),
-      attendanceOptions: this.extractMultiSelect(properties['Attendance options']?.multi_select),
+      attendanceOptions: this.extractMultiSelect(
+        properties['Attendance options']?.multi_select
+      ),
       usageCount: this.extractNumber(properties['Usage count']?.rollup?.number),
-      latestUseDate: this.extractDate(properties['Latest use date']?.rollup?.date),
+      latestUseDate: this.extractDate(
+        properties['Latest use date']?.rollup?.date
+      ),
       latestUseTeam: properties['Latest use team']?.formula?.string || null,
       usedInTeams: this.extractArray(properties['Used in team']?.rollup?.array),
-      usedOnDates: this.extractDateArray(properties['Used on date']?.rollup?.array)
+      usedOnDates: this.extractDateArray(
+        properties['Used on date']?.rollup?.array
+      ),
     };
   }
 
@@ -68,4 +73,4 @@ export class RetrospectiveElementAdapter {
     }
     return multiSelect.map(option => option.name).filter(Boolean);
   }
-} 
+}

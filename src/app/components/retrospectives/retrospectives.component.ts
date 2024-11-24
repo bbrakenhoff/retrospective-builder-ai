@@ -6,13 +6,12 @@ import { NotionService } from '../../core/services/notion.service';
   selector: 'app-retrospectives',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './retrospectives.component.html'
+  templateUrl: './retrospectives.component.html',
 })
 export class RetrospectivesComponent {
-
   readonly retrospectives$;
 
-  constructor(private readonly notionService: NotionService) { 
+  constructor(private readonly notionService: NotionService) {
     this.retrospectives$ = this.notionService.getRetrospectives$();
   }
-} 
+}

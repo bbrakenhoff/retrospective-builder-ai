@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Retrospective } from '../models/retrospective.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RetrospectiveAdapter {
   fromNotionResponse(notionResponse: any): Retrospective[] {
@@ -23,14 +23,24 @@ export class RetrospectiveAdapter {
       sprint: this.extractText(properties.Sprint?.title?.[0]?.plain_text),
       team: this.extractText(properties.Team?.select?.name),
       date: this.extractDate(properties.Date?.date?.start),
-      planningStatus: this.extractText(properties['Planning status']?.formula?.string),
+      planningStatus: this.extractText(
+        properties['Planning status']?.formula?.string
+      ),
       url: notionPage.url,
       // Phase relations
-      setTheStageElements: this.extractRelation(properties['Set the Stage']?.relation),
-      gatherDataElements: this.extractRelation(properties['Gather data']?.relation),
-      generateInsightsElements: this.extractRelation(properties['Generate insights']?.relation),
-      decideWhatToDoElements: this.extractRelation(properties['Decide what to do']?.relation),
-      closingElements: this.extractRelation(properties['Closing']?.relation)
+      setTheStageElements: this.extractRelation(
+        properties['Set the Stage']?.relation
+      ),
+      gatherDataElements: this.extractRelation(
+        properties['Gather data']?.relation
+      ),
+      generateInsightsElements: this.extractRelation(
+        properties['Generate insights']?.relation
+      ),
+      decideWhatToDoElements: this.extractRelation(
+        properties['Decide what to do']?.relation
+      ),
+      closingElements: this.extractRelation(properties['Closing']?.relation),
     };
   }
 
@@ -48,4 +58,4 @@ export class RetrospectiveAdapter {
     }
     return relation.map(item => item.id).filter(Boolean);
   }
-} 
+}

@@ -13,4 +13,4 @@ export interface Retrospective {
   generateInsightsElements: string[];
   decideWhatToDoElements: string[];
   closingElements: string[];
-} 
+}

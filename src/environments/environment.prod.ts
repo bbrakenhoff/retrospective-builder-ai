@@ -4,7 +4,7 @@ export const environment = {
     apiKey: 'placeholder-key',
     databases: {
       retrospectiveElements: 'placeholder-database-id',
-      retrospectives: 'placeholder-database-id'
-    }
-  }
-}; 
+      retrospectives: 'placeholder-database-id',
+    },
+  },
+};

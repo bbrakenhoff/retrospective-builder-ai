@@ -6,13 +6,13 @@ import { NotionService } from '../../core/services/notion.service';
   selector: 'app-retrospective-elements',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './retrospective-elements.component.html'
+  templateUrl: './retrospective-elements.component.html',
 })
 export class RetrospectiveElementsComponent {
-
   readonly retrospectiveElements$;
 
   constructor(private readonly notionService: NotionService) {
-    this.retrospectiveElements$ = this.notionService.getRetrospectiveElements$();
+    this.retrospectiveElements$ =
+      this.notionService.getRetrospectiveElements$();
   }
-} 
+}

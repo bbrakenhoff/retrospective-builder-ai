@@ -6,13 +6,14 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'retrospectives',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'retrospective-elements',
-    component: RetrospectiveElementsComponent
-  }, {
-    path:'retrospectives',
-    component: RetrospectivesComponent
-  }
+    component: RetrospectiveElementsComponent,
+  },
+  {
+    path: 'retrospectives',
+    component: RetrospectivesComponent,
+  },
 ];

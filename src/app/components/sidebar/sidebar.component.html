@@ -1,22 +1,22 @@
-<nav class="fixed flex flex-col h-screen justify-between p-4 w-[250px] bg-white border-neutral-200 border-r dark:bg-neutral-900 dark:border-neutral-800">
+<nav
+  class="fixed flex flex-col h-screen justify-between p-4 w-[250px] bg-white border-neutral-200 border-r dark:bg-neutral-900 dark:border-neutral-800">
   <!-- Top section -->
-  <div class="flex flex-col items-center border-b border-neutral-200 dark:border-neutral-800">
-      <img 
-        src="assets/logo-vault8.png" 
-        alt="Logo" 
-        class="block h-24 mb-6"
-      />
-      <h1 class="font-semibold m-0 mb-4 text-center text-xl text-neutral-900 dark:text-neutral-50">{{ siteName }}</h1>
+  <div
+    class="flex flex-col items-center border-b border-neutral-200 dark:border-neutral-800">
+    <img src="assets/logo-vault8.png" alt="Logo" class="block h-24 mb-6" />
+    <h1
+      class="font-semibold m-0 mb-4 text-center text-xl text-neutral-900 dark:text-neutral-50">
+      {{ siteName }}
+    </h1>
   </div>
 
   <!-- Theme switcher dropdown -->
   <div class="relative">
-    <button 
-      (click)="toggleDropdown()" 
-      class="flex items-center p-3 w-full"
-    >
+    <button (click)="toggleDropdown()" class="flex items-center p-3 w-full">
       <span class="mr-2">
-        <svg-icon [src]="getThemeIcon(currentTheme())" [svgStyle]="{ 'width.px': 24 }"></svg-icon>
+        <svg-icon
+          [src]="getThemeIcon(currentTheme())"
+          [svgStyle]="{ 'width.px': 24 }"></svg-icon>
       </span>
       <span class="capitalize flex items-center">
         {{ currentTheme() }}
@@ -25,18 +25,20 @@
 
     <!-- Dropdown menu -->
     @if (isDropdownOpen()) {
-      <div class="absolute bg-white border border-neutral-200 bottom-full mb-2 rounded-lg shadow-lg w-full dark:bg-neutral-800 dark:border-neutral-700">
+      <div
+        class="absolute bg-white border border-neutral-200 bottom-full mb-2 rounded-lg shadow-lg w-full dark:bg-neutral-800 dark:border-neutral-700">
         <div class="p-1">
           @for (theme of themes; track theme) {
-            <button 
+            <button
               (click)="setTheme(theme)"
               class="flex gap-3 items-center p-2 rounded text-neutral-700 w-full hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
               [class.bg-neutral-100]="currentTheme() === theme"
-              [class.dark:bg-neutral-700]="currentTheme() === theme"
-            >
-            <span class="mr-2">
-              <svg-icon [src]="getThemeIcon(theme)" [svgStyle]="{ 'width.px': 24 }"></svg-icon>
-            </span>
+              [class.dark:bg-neutral-700]="currentTheme() === theme">
+              <span class="mr-2">
+                <svg-icon
+                  [src]="getThemeIcon(theme)"
+                  [svgStyle]="{ 'width.px': 24 }"></svg-icon>
+              </span>
               <span class="capitalize">{{ theme }}</span>
             </button>
           }
@@ -44,4 +46,4 @@
       </div>
     }
   </div>
-</nav> 
+</nav>
