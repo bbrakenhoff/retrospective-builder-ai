@@ -1,10 +1,12 @@
+import { DateTime } from 'luxon';
+
 export interface Retrospective {
   id: string;
-  createdTime: Date;
-  lastEditedTime: Date;
+  createdTime: DateTime;
+  lastEditedTime: DateTime;
   sprint: string;
   team: string;
-  date: Date | null;
+  date: DateTime | null;
   planningStatus: string;
   url: string;
   // Relation fields for different phases

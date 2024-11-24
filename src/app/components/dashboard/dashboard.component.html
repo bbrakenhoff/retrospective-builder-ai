@@ -1,1 +1,44 @@
 <p>dashboard works!</p>
+
+<div class="p-6">
+  <div class="overflow-x-auto rounded-lg shadow-md">
+    <table class="w-full bg-white text-left text-sm dark:bg-neutral-900">
+      <thead
+        class="border-b border-neutral-200 text-xs uppercase dark:border-neutral-700">
+        <tr>
+          <th class="px-6 py-3">Date</th>
+          <th class="px-6 py-3">Sprint</th>
+          <th class="px-6 py-3">Team</th>
+          <th class="px-6 py-3">Gather Data</th>
+          <th class="px-6 py-3">Generate Insights</th>
+          <th class="px-6 py-3">Decide What To Do</th>
+          <th class="px-6 py-3">Closing</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (retro of pastRetrospectives$ | async; track retro.id) {
+          <tr
+            class="border-b border-neutral-700 bg-white hover:bg-gray-50 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+            <td class="px-6 py-4">
+              {{ retro.date?.toJSDate() | date: 'mediumDate' }}
+            </td>
+            <td class="px-6 py-4">{{ retro.sprint }}</td>
+            <td class="px-6 py-4">{{ retro.team }}</td>
+            <td class="px-6 py-4">
+              {{ retro.gatherDataElements[0] }}
+            </td>
+            <td class="px-6 py-4">
+              {{ retro.generateInsightsElements[0] }}
+            </td>
+            <td class="px-6 py-4">
+              {{ retro.decideWhatToDoElements[0] }}
+            </td>
+            <td class="px-6 py-4">
+              {{ retro.closingElements[0] }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Retrospective } from '../models/retrospective.model';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +19,8 @@ export class RetrospectiveAdapter {
 
     return {
       id: notionPage.id,
-      createdTime: new Date(notionPage.created_time),
-      lastEditedTime: new Date(notionPage.last_edited_time),
+      createdTime: DateTime.fromISO(notionPage.created_time),
+      lastEditedTime: DateTime.fromISO(notionPage.last_edited_time),
       sprint: this.extractText(properties.Sprint?.title?.[0]?.plain_text),
       team: this.extractText(properties.Team?.select?.name),
       date: this.extractDate(properties.Date?.date?.start),
@@ -48,8 +49,8 @@ export class RetrospectiveAdapter {
     return value || '';
   }
 
-  private extractDate(dateString: string | null): Date | null {
-    return dateString ? new Date(dateString) : null;
+  private extractDate(dateString: string | null): DateTime | null {
+    return dateString ? DateTime.fromISO(dateString) : null;
   }
 
   private extractRelation(relation: any[]): string[] {
