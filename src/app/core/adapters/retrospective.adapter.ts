@@ -1,12 +1,17 @@
 import { Injectable } from '@angular/core';
 import { DateTime } from 'luxon';
 import { Retrospective } from '../models';
-import { NotionQueryResponse, NotionPage, NotionRelation } from '../types';
+import {
+  NotionPage,
+  NotionQueryResponse,
+  NotionRetrospectiveProperties,
+} from '../types';
+import { BaseAdapter } from './base.adapter';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RetrospectiveAdapter {
+export class RetrospectiveAdapter extends BaseAdapter {
   mapNotionResponseToRetrospectives(
     notionResponse: NotionQueryResponse
   ): Retrospective[] {
@@ -20,7 +25,7 @@ export class RetrospectiveAdapter {
   }
 
   private mapNotionPageToRetrospective(notionPage: NotionPage): Retrospective {
-    const properties = notionPage.properties;
+    const properties = notionPage.properties as NotionRetrospectiveProperties;
 
     return {
       id: notionPage.id,
@@ -46,20 +51,5 @@ export class RetrospectiveAdapter {
       ),
       closingElements: this.extractRelation(properties['Closing']?.relation),
     };
-  }
-
-  private extractText(value: string | undefined): string {
-    return value || '';
-  }
-
-  private extractDate(dateString: string | null | undefined): DateTime | null {
-    return dateString ? DateTime.fromISO(dateString) : null;
-  }
-
-  private extractRelation(relation: NotionRelation[] | undefined): string[] {
-    if (!Array.isArray(relation)) {
-      return [];
-    }
-    return relation.map(item => item.id).filter(Boolean);
   }
 }
