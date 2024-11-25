@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
-import { Retrospective } from '../models/retrospective.model';
 import { DateTime } from 'luxon';
+import { Retrospective } from '../models';
+import { NotionQueryResponse, NotionPage, NotionRelation } from '../types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RetrospectiveAdapter {
-  fromNotionResponse(notionResponse: any): Retrospective[] {
+  mapNotionResponseToRetrospectives(
+    notionResponse: NotionQueryResponse
+  ): Retrospective[] {
     if (!notionResponse?.results) {
       return [];
     }
 
-    return notionResponse.results.map((item: any) => this.fromNotionPage(item));
+    return notionResponse.results.map((item: NotionPage) =>
+      this.mapNotionPageToRetrospective(item)
+    );
   }
 
-  private fromNotionPage(notionPage: any): Retrospective {
+  private mapNotionPageToRetrospective(notionPage: NotionPage): Retrospective {
     const properties = notionPage.properties;
 
     return {
@@ -24,9 +29,7 @@ export class RetrospectiveAdapter {
       sprint: this.extractText(properties.Sprint?.title?.[0]?.plain_text),
       team: this.extractText(properties.Team?.select?.name),
       date: this.extractDate(properties.Date?.date?.start),
-      planningStatus: this.extractText(
-        properties['Planning status']?.formula?.string
-      ),
+
       url: notionPage.url,
       // Phase relations
       setTheStageElements: this.extractRelation(
@@ -45,15 +48,15 @@ export class RetrospectiveAdapter {
     };
   }
 
-  private extractText(value: any): string {
+  private extractText(value: string | undefined): string {
     return value || '';
   }
 
-  private extractDate(dateString: string | null): DateTime | null {
+  private extractDate(dateString: string | null | undefined): DateTime | null {
     return dateString ? DateTime.fromISO(dateString) : null;
   }
 
-  private extractRelation(relation: any[]): string[] {
+  private extractRelation(relation: NotionRelation[] | undefined): string[] {
     if (!Array.isArray(relation)) {
       return [];
     }

@@ -7,7 +7,6 @@ export interface Retrospective {
   sprint: string;
   team: string;
   date: DateTime | null;
-  planningStatus: string;
   url: string;
   // Relation fields for different phases
   setTheStageElements: string[];

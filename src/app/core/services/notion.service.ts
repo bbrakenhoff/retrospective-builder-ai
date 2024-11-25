@@ -39,7 +39,9 @@ export class NotionService {
         database_id: environment.notion.databases.retrospectives,
       })
     ).pipe(
-      map(response => this.retrospectiveAdapter.fromNotionResponse(response))
+      map(response =>
+        this.retrospectiveAdapter.mapNotionResponseToRetrospectives(response)
+      )
     );
   }
 }
