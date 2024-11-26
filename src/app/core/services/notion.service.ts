@@ -5,6 +5,8 @@ import { environment } from '../../../environments/environment';
 import { RetrospectiveElementAdapter } from '../adapters/retrospective-element.adapter';
 import { RetrospectiveElement } from '../models/retrospective-element.model';
 import { RetrospectiveAdapter } from '../adapters/retrospective.adapter';
+import { NotionQueryResponse } from '../types';
+import { Retrospective } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -28,19 +30,23 @@ export class NotionService {
       })
     ).pipe(
       map(response =>
-        this.retrospectiveElementAdapter.fromNotionResponse(response)
+        this.retrospectiveElementAdapter.fromNotionResponse(
+          response as NotionQueryResponse
+        )
       )
     );
   }
 
-  getRetrospectives$(): Observable<any> {
+  getRetrospectives$(): Observable<Retrospective[]> {
     return from(
       this.notion.databases.query({
         database_id: environment.notion.databases.retrospectives,
       })
     ).pipe(
       map(response =>
-        this.retrospectiveAdapter.mapNotionResponseToRetrospectives(response)
+        this.retrospectiveAdapter.mapNotionResponseToRetrospectives(
+          response as NotionQueryResponse
+        )
       )
     );
   }

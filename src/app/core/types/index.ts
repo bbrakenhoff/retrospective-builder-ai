@@ -4,6 +4,7 @@
  * the actual API response structure received through the SDK.
  */
 export * from './notion-page';
+export * from './notion-property';
 export * from './notion-query-response';
 export * from './notion-relation';
 export * from './notion-retrospective-properties';

@@ -1,8 +1,3 @@
-import {
-  NotionRetrospectiveElementProperties,
-  NotionRetrospectiveProperties,
-} from '.';
-
 export interface NotionPage {
   id: string;
   created_time: string;

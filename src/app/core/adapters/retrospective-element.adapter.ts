@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 import { RetrospectiveElement } from '../models/retrospective-element.model';
-import { BaseAdapter } from './base.adapter';
 import {
   NotionPage,
   NotionQueryResponse,
   NotionRetrospectiveElementProperties,
 } from '../types';
-import { DateTime } from 'luxon';
 import {
   NotionMultiSelect,
   NotionRichText,
   NotionTitle,
 } from '../types/notion-property';
+import { BaseAdapter } from './base.adapter';
 
 @Injectable({
   providedIn: 'root',
