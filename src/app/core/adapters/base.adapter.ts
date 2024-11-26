@@ -26,10 +26,10 @@ export abstract class BaseAdapter {
   protected extractMultiSelect(
     multiSelect: NotionMultiSelect | undefined
   ): string[] {
-    if (!Array.isArray(multiSelect)) {
+    if (!Array.isArray(multiSelect?.multi_select)) {
       return [];
     }
-    return multiSelect.map(option => option.name).filter(Boolean);
+    return multiSelect.multi_select.map(option => option.name).filter(Boolean);
   }
 
   protected extractTitle(
