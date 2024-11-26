@@ -7,4 +7,5 @@ export interface RetrospectiveElement {
   name: string;
   link: string;
   attendanceOptions: string[];
+  usedInRetrospectiveIds: string[];
 }

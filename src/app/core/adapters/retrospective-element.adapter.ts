@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { RetrospectiveElement } from '../models/retrospective-element.model';
 import {
+  NotionMultiSelect,
   NotionPage,
   NotionQueryResponse,
   NotionRetrospectiveElementProperties,
-} from '../types';
-import {
-  NotionMultiSelect,
   NotionRichText,
   NotionTitle,
-} from '../types/notion-property';
+} from '../types';
+
 import { BaseAdapter } from './base.adapter';
 
 @Injectable({
@@ -42,6 +41,9 @@ export class RetrospectiveElementAdapter extends BaseAdapter {
       link: this.extractRichText(properties.Link as NotionRichText | undefined),
       attendanceOptions: this.extractMultiSelect(
         properties['Attendance options'] as NotionMultiSelect
+      ),
+      usedInRetrospectiveIds: this.extractRelation(
+        properties['↔️ Retrospective planning']?.relation
       ),
     };
   }

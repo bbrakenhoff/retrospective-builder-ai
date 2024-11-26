@@ -1,21 +1,16 @@
 import {
-  SelectPropertyItemObjectResponse,
-  MultiSelectPropertyItemObjectResponse,
-  TitlePropertyItemObjectResponse,
-  RichTextPropertyItemObjectResponse,
-  RollupPropertyItemObjectResponse,
-  FormulaPropertyItemObjectResponse,
-} from '@notionhq/client/build/src/api-endpoints';
+  NotionMultiSelect,
+  NotionRichText,
+  NotionSelect,
+  NotionTitle,
+} from './notion-property';
+import { NotionRelation } from './notion-relation';
 
 export interface NotionRetrospectiveElementProperties {
-  Theme?: SelectPropertyItemObjectResponse;
-  Phase?: MultiSelectPropertyItemObjectResponse;
-  Name?: TitlePropertyItemObjectResponse;
-  Link?: RichTextPropertyItemObjectResponse;
-  'Attendance options'?: MultiSelectPropertyItemObjectResponse;
-  'Usage count'?: RollupPropertyItemObjectResponse;
-  'Latest use date'?: RollupPropertyItemObjectResponse;
-  'Latest use team'?: FormulaPropertyItemObjectResponse;
-  'Used in team'?: RollupPropertyItemObjectResponse;
-  'Used on date'?: RollupPropertyItemObjectResponse;
+  Theme?: NotionSelect;
+  Phase?: NotionMultiSelect;
+  Name?: NotionTitle;
+  Link?: NotionRichText;
+  'Attendance options'?: NotionMultiSelect;
+  '↔️ Retrospective planning'?: { relation: NotionRelation[] };
 }
