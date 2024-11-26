@@ -9,7 +9,9 @@ import { DateTime } from 'luxon';
   providedIn: 'root',
 })
 export class RetrospectiveService {
-  private retrospectiveCache$$ = new BehaviorSubject<Retrospective[]>([]);
+  private readonly retrospectiveCache$$ = new BehaviorSubject<Retrospective[]>(
+    []
+  );
 
   private isLoading$$ = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this.isLoading$$.asObservable();

@@ -1,4 +1,11 @@
-@if (!isLoading) {
+@if (!isLoadingRetrospectiveElements) {
+  @if (retrospectiveElements$ | async; as retrospectiveElements) {
+    <pre>{{ retrospectiveElements | json }}</pre>
+  }
+} @else {
+  <div class="flex justify-center">Even wachten...</div>
+}
+@if (!isLoadingRetrospectives) {
   @if (unplannedRetrospectives$ | async; as unplannedRetros) {
     <app-retrospective-cards
       heading="Unplanned retrospectives"
