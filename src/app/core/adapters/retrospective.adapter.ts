@@ -7,6 +7,7 @@ import {
   NotionRetrospectiveProperties,
 } from '../types';
 import { BaseAdapter } from './base.adapter';
+import { NotionTitle } from '../types/notion-property';
 
 @Injectable({
   providedIn: 'root',
@@ -31,8 +32,8 @@ export class RetrospectiveAdapter extends BaseAdapter {
       id: notionPage.id,
       createdTime: DateTime.fromISO(notionPage.created_time),
       lastEditedTime: DateTime.fromISO(notionPage.last_edited_time),
-      sprint: this.extractText(properties.Sprint?.title?.[0]?.plain_text),
-      team: this.extractText(properties.Team?.select?.name),
+      sprint: this.extractTitle(properties.Sprint as NotionTitle | undefined),
+      team: this.extractText(properties.Team?.select?.name ?? ''),
       date: this.extractDate(properties.Date?.date?.start),
 
       url: notionPage.url,
