@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { RetrospectiveElement } from './retrospective-element.model';
 
 export interface Retrospective {
   id: string;
@@ -8,10 +9,13 @@ export interface Retrospective {
   team: string;
   date: DateTime | null;
   url: string;
+
   // Relation fields for different phases
-  setTheStageElements: string[];
-  gatherDataElements: string[];
-  generateInsightsElements: string[];
-  decideWhatToDoElements: string[];
-  closingElements: string[];
+  phases: {
+    setTheStage: RetrospectiveElement | null;
+    gatherData: RetrospectiveElement | null;
+    generateInsights: RetrospectiveElement | null;
+    decideWhatToDo: RetrospectiveElement | null;
+    closing: RetrospectiveElement | null;
+  };
 }

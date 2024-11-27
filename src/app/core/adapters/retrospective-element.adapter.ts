@@ -10,6 +10,7 @@ import {
 } from '../types';
 
 import { BaseAdapter } from './base.adapter';
+import { DateTime } from 'luxon';
 
 @Injectable({
   providedIn: 'root',
@@ -33,8 +34,8 @@ export class RetrospectiveElementAdapter extends BaseAdapter {
 
     return {
       id: notionPage.id,
-      createdTime: new Date(notionPage.created_time),
-      lastEditedTime: new Date(notionPage.last_edited_time),
+      createdTime: DateTime.fromISO(notionPage.created_time),
+      lastEditedTime: DateTime.fromISO(notionPage.last_edited_time),
       theme: this.extractText(properties.Theme?.select?.name ?? ''),
       phase: this.extractMultiSelect(properties.Phase as NotionMultiSelect),
       name: this.extractTitle(properties.Name as NotionTitle | undefined),

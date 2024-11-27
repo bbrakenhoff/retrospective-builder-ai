@@ -21,13 +21,11 @@ export class RetrospectiveElementService {
     return this.retrospectiveElementCache$$.asObservable();
   }
 
-  // findForRetrospective(retrospectiveId: string): Observable<RetrospectiveElement[]> {
-  //   return this.all$().pipe(
-  //     map(elements =>
-  //       elements.filter(element => element.)
-  //     )
-  //   );
-  // }
+  findById$(id: string): Observable<RetrospectiveElement | undefined> {
+    return this.all$().pipe(
+      map(elements => elements.find(element => element.id === id))
+    );
+  }
 
   private loadRetrospectiveElements(): void {
     this.isLoading$$.next(true);

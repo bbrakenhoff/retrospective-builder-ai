@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DateTime } from 'luxon';
-import { Retrospective } from '../models';
+import { Retrospective, RetrospectiveElement } from '../models';
 import {
   NotionPage,
   NotionQueryResponse,
+  NotionRelation,
   NotionRetrospectiveProperties,
 } from '../types';
 import { BaseAdapter } from './base.adapter';
@@ -37,20 +38,41 @@ export class RetrospectiveAdapter extends BaseAdapter {
       date: this.extractDate(properties.Date?.date?.start),
 
       url: notionPage.url,
+
       // Phase relations
-      setTheStageElements: this.extractRelation(
-        properties['Set the Stage']?.relation
-      ),
-      gatherDataElements: this.extractRelation(
-        properties['Gather data']?.relation
-      ),
-      generateInsightsElements: this.extractRelation(
-        properties['Generate insights']?.relation
-      ),
-      decideWhatToDoElements: this.extractRelation(
-        properties['Decide what to do']?.relation
-      ),
-      closingElements: this.extractRelation(properties['Closing']?.relation),
+      phases: {
+        setTheStage: this.extractRetrospectiveElement(
+          properties['Set the Stage']?.relation
+        ),
+        gatherData: this.extractRetrospectiveElement(
+          properties['Gather data']?.relation
+        ),
+        generateInsights: this.extractRetrospectiveElement(
+          properties['Generate insights']?.relation
+        ),
+        decideWhatToDo: this.extractRetrospectiveElement(
+          properties['Decide what to do']?.relation
+        ),
+        closing: this.extractRetrospectiveElement(
+          properties['Closing']?.relation
+        ),
+      },
+    };
+  }
+
+  private extractRetrospectiveElement(
+    relation: NotionRelation[] = []
+  ): RetrospectiveElement {
+    return {
+      id: this.extractRelation(relation)[0],
+      createdTime: null,
+      lastEditedTime: null,
+      theme: '',
+      phase: [],
+      name: '',
+      link: '',
+      attendanceOptions: [],
+      usedInRetrospectiveIds: [],
     };
   }
 }
