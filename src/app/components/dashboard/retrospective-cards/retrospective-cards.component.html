@@ -20,25 +20,31 @@
                 <div class="text-xs font-medium uppercase text-neutral-500">
                   Gather Data
                 </div>
-                <div>{{ retro.gatherDataElements[0] }}</div>
+                <div>{{ retro.phases.setTheStage?.name }}</div>
+              </div>
+              <div>
+                <div class="text-xs font-medium uppercase text-neutral-500">
+                  Gather Data
+                </div>
+                <div>{{ retro.phases.gatherData?.name }}</div>
               </div>
               <div>
                 <div class="text-xs font-medium uppercase text-neutral-500">
                   Generate Insights
                 </div>
-                <div>{{ retro.generateInsightsElements[0] }}</div>
+                <div>{{ retro.phases.generateInsights?.name }}</div>
               </div>
               <div>
                 <div class="text-xs font-medium uppercase text-neutral-500">
                   Decide What To Do
                 </div>
-                <div>{{ retro.decideWhatToDoElements[0] }}</div>
+                <div>{{ retro.phases.decideWhatToDo?.name }}</div>
               </div>
               <div>
                 <div class="text-xs font-medium uppercase text-neutral-500">
                   Closing
                 </div>
-                <div>{{ retro.closingElements[0] }}</div>
+                <div>{{ retro.phases.closing?.name }}</div>
               </div>
             </div>
           </div>

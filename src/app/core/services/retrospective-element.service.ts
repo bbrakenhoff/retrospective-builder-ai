@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, take } from 'rxjs';
+import { BehaviorSubject, map, Observable, share, take } from 'rxjs';
 import { RetrospectiveElement } from '../models';
 import { NotionService } from './notion.service';
 
@@ -18,13 +18,7 @@ export class RetrospectiveElementService {
 
   all$(): Observable<RetrospectiveElement[]> {
     this.loadRetrospectiveElements();
-    return this.retrospectiveElementCache$$.asObservable();
-  }
-
-  findById$(id: string): Observable<RetrospectiveElement | undefined> {
-    return this.all$().pipe(
-      map(elements => elements.find(element => element.id === id))
-    );
+    return this.retrospectiveElementCache$$.asObservable().pipe(share());
   }
 
   private loadRetrospectiveElements(): void {
