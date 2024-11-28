@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from '@notionhq/client';
-import { Observable, from, map, tap } from 'rxjs';
+import { Observable, from, map, tap, share } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { RetrospectiveElementAdapter } from '../adapters/retrospective-element.adapter';
 import { RetrospectiveElement } from '../models/retrospective-element.model';
@@ -29,12 +29,12 @@ export class NotionService {
         database_id: environment.notion.databases.retrospectiveElements,
       })
     ).pipe(
-      tap(response => console.log(response)),
       map(response =>
         this.retrospectiveElementAdapter.fromNotionResponse(
           response as NotionQueryResponse
         )
-      )
+      ),
+      share()
     );
   }
 
@@ -48,7 +48,8 @@ export class NotionService {
         this.retrospectiveAdapter.mapNotionResponseToRetrospectives(
           response as NotionQueryResponse
         )
-      )
+      ),
+      share()
     );
   }
 }

@@ -54,12 +54,7 @@ export class RetrospectiveService {
   }
 
   private loadRetrospectives(force = false): void {
-    console.log(
-      `🩷Bijoya - retrospective.service.ts > 51`,
-      'loadRetrospectives'
-    );
     if (force || this.cacheIsEmpty) {
-      console.log(`🩷Bijoya - retrospective.service.ts > 56 in de if`);
       this.isLoading$$.next(true);
 
       combineLatest({
@@ -69,11 +64,6 @@ export class RetrospectiveService {
         .pipe(take(1))
         .subscribe({
           next: ({ retrospectives, elements }) => {
-            console.log(
-              `🩷Bijoya - retrospective.service.ts > 64 retrospectivesWithPhases`,
-              retrospectives,
-              elements
-            );
             const retrospectivesWithPhases = retrospectives.map(retrospective =>
               this.populateRetrospectiveWithPhases(retrospective, elements)
             );
@@ -82,9 +72,6 @@ export class RetrospectiveService {
           },
           error: e => {
             console.error(`🩷Bijoya - retrospective.service.ts > 69 error`, e);
-          },
-          complete: () => {
-            console.log('🩷Bijoya - retrospective.service.ts > 72 complete');
           },
         });
     }
