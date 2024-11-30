@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, share, take } from 'rxjs';
+import { BehaviorSubject, Observable, share, take } from 'rxjs';
 import { RetrospectiveElement } from '../models';
 import { NotionService } from './notion.service';
 

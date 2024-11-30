@@ -31,8 +31,14 @@ fdescribe('RetrospectiveElementService', () => {
 
   describe('all$()', () => {
     it('should load retrospective elements on initial load', done => {
+      const isLoadingResults: boolean[] = [];
+      service.isLoading$.subscribe({
+        next: isLoading => isLoadingResults.push(isLoading),
+      });
+
       service.all$().subscribe(elements => {
         expect(elements).toEqual(testData);
+        expect(isLoadingResults).toEqual([false, true, false]);
         done();
       });
     });
@@ -76,19 +82,14 @@ fdescribe('RetrospectiveElementService', () => {
         },
         next: elements => {
           observerCount++;
-          console.log(
-            `🩷Bijoya - retrospective-element.service.spec.ts >  on next`,
-            elements,
-            observerCount
-          );
 
           if (observerCount === 1) {
-            // expect(elements).toEqual(initialTestData);
+            expect(elements).toEqual(initialTestData);
             expect(
               notionServiceSpy.getRetrospectiveElements$
             ).toHaveBeenCalledTimes(1);
           } else if (observerCount == 2) {
-            // expect(elements).toEqual(reloadTestData);
+            expect(elements).toEqual(reloadTestData);
             expect(
               notionServiceSpy.getRetrospectiveElements$
             ).toHaveBeenCalledTimes(2);
@@ -97,14 +98,7 @@ fdescribe('RetrospectiveElementService', () => {
         },
       };
 
-      console.log(
-        `🩷Bijoya - retrospective-element.service.spec.ts > 100 request all$`
-      );
       service.all$().subscribe(observer);
-
-      console.log(
-        `🩷Bijoya - retrospective-element.service.spec.ts > 103 requst reload`
-      );
       service.reload();
     });
   });
