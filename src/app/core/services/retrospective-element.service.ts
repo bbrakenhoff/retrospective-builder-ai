@@ -7,28 +7,28 @@ import { NotionService } from './notion.service';
   providedIn: 'root',
 })
 export class RetrospectiveElementService {
-  private readonly retrospectiveElementCache$$ = new BehaviorSubject<
-    RetrospectiveElement[]
-  >([]);
+  private readonly cache$$ = new BehaviorSubject<RetrospectiveElement[]>([]);
 
   private isLoading$$ = new BehaviorSubject<boolean>(false);
   readonly isLoading$ = this.isLoading$$.asObservable();
 
   constructor(private notionService: NotionService) {}
 
-  all$(): Observable<RetrospectiveElement[]> {
-    this.loadRetrospectiveElements();
-    return this.retrospectiveElementCache$$.asObservable().pipe(share());
+  all$(force = false): Observable<RetrospectiveElement[]> {
+    if (force || this.cache$$.value.length === 0) {
+      this.reload();
+    }
+    return this.cache$$.asObservable().pipe(share());
   }
 
-  private loadRetrospectiveElements(): void {
+  reload(): void {
     this.isLoading$$.next(true);
     this.notionService
       .getRetrospectiveElements$()
-      .pipe(take(1))
+      .pipe(take(1), share())
       .subscribe({
         next: elements => {
-          this.retrospectiveElementCache$$.next(elements);
+          this.cache$$.next(elements);
           this.isLoading$$.next(false);
         },
       });
