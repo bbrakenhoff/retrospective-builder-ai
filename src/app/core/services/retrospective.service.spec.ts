@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { RetrospectiveService } from './retrospective.service';
 import { Observer, of } from 'rxjs';
-import { Retrospective } from '../models';
+import { Retrospective, RetrospectiveElement } from '../models';
 import { TestDataFactory } from '../../../testing/test-data-factory';
 import { NotionService } from './notion.service';
 import { RetrospectiveElementService } from './retrospective-element.service';
@@ -50,7 +50,7 @@ fdescribe('RetrospectiveService', () => {
   });
 
   describe('all$', () => {
-    it('should load retrospective elements on initial load', done => {
+    it('should load retrospectives on initial load', done => {
       const isLoadingResults: boolean[] = [];
       service.isLoading$.subscribe({
         next: isLoading => isLoadingResults.push(isLoading),
@@ -83,7 +83,7 @@ fdescribe('RetrospectiveService', () => {
       expect(retrospectiveElementServiceSpy.all$).toHaveBeenCalledTimes(1);
     });
 
-    it('should reload retrospective elements when reload is called', done => {
+    it('should reload retrospectives when reload is called where force is true', done => {
       const initialTestData = testData.retrospectives.slice(0, 1);
       const reloadTestData = testData.retrospectives.slice(1);
 
@@ -133,6 +133,68 @@ fdescribe('RetrospectiveService', () => {
 
       service.all$().subscribe(observer);
       service.reload(true);
+    });
+
+    it('should reload retrospectives when reload is called where force is false and cache not empty', done => {
+      const initialTestData = testData.retrospectives.slice(0, 1);
+      const reloadTestData = testData.retrospectives.slice(1);
+
+      notionServiceSpy.getRetrospectives$.and.returnValues(
+        of(initialTestData),
+        of(reloadTestData)
+      );
+      let observerCount = 0;
+      let results: Retrospective[] = [];
+      const observer: Observer<Retrospective[]> = {
+        error: done.fail,
+        complete: done,
+        next: elements => {
+          observerCount++;
+          results = elements;
+        },
+      };
+
+      service.all$().subscribe(observer);
+      service.reload();
+
+      setTimeout(() => {
+        expect(results).toEqual(initialTestData);
+        expect(observerCount).toBe(1);
+        expect(notionServiceSpy.getRetrospectives$).toHaveBeenCalledTimes(1);
+        done();
+      }, 1000);
+    });
+
+    it('should reload retrospectives when reload is called where force is false but cache is empty', done => {
+      const initialTestData: Retrospective[] = [];
+      const reloadTestData = testData.retrospectives;
+
+      notionServiceSpy.getRetrospectives$.and.returnValues(
+        of(initialTestData),
+        of(reloadTestData)
+      );
+      let observerCount = 0;
+      let results: Retrospective[] = [];
+      const observer: Observer<Retrospective[]> = {
+        error: done.fail,
+        complete: () => {
+          // noop
+        },
+        next: elements => {
+          results = elements;
+          observerCount++;
+        },
+      };
+
+      service.all$().subscribe(observer);
+      service.reload();
+
+      setTimeout(() => {
+        expect(observerCount).toBe(2);
+        expect(notionServiceSpy.getRetrospectives$).toHaveBeenCalledTimes(2);
+        expect(results).toEqual(reloadTestData);
+        done();
+      }, jasmine.DEFAULT_TIMEOUT_INTERVAL - 1000);
     });
   });
 });

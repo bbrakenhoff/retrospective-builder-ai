@@ -64,7 +64,7 @@ fdescribe('RetrospectiveElementService', () => {
       );
     });
 
-    it('should reload retrospective elements when reload is called', done => {
+    it('should reload retrospective elements when reload is called where force is true', done => {
       const initialTestData = testData.slice(0, 2);
       const reloadTestData = testData.slice(2);
 
@@ -100,6 +100,72 @@ fdescribe('RetrospectiveElementService', () => {
 
       service.all$().subscribe(observer);
       service.reload(true);
+    });
+
+    it('should reload retrospectiveelements when reload is called where force is false and cache not empty', done => {
+      const initialTestData = testData.slice(0, 2);
+      const reloadTestData = testData.slice(2);
+
+      notionServiceSpy.getRetrospectiveElements$.and.returnValues(
+        of(initialTestData),
+        of(reloadTestData)
+      );
+      let observerCount = 0;
+      let results: RetrospectiveElement[] = [];
+      const observer: Observer<RetrospectiveElement[]> = {
+        error: done.fail,
+        complete: done,
+        next: elements => {
+          observerCount++;
+          results = elements;
+        },
+      };
+
+      service.all$().subscribe(observer);
+      service.reload();
+
+      setTimeout(() => {
+        expect(observerCount).toBe(1);
+        expect(
+          notionServiceSpy.getRetrospectiveElements$
+        ).toHaveBeenCalledTimes(1);
+        expect(results).toEqual(initialTestData);
+        done();
+      }, 1000);
+    });
+
+    it('should reload retrospective elements when reload is called where force is false but cache is empty', done => {
+      const initialTestData: RetrospectiveElement[] = [];
+      const reloadTestData = testData;
+
+      notionServiceSpy.getRetrospectiveElements$.and.returnValues(
+        of(initialTestData),
+        of(reloadTestData)
+      );
+      let observerCount = 0;
+      let results: RetrospectiveElement[] = [];
+      const observer: Observer<RetrospectiveElement[]> = {
+        error: done.fail,
+        complete: () => {
+          // noop
+        },
+        next: elements => {
+          results = elements;
+          observerCount++;
+        },
+      };
+
+      service.all$().subscribe(observer);
+      service.reload();
+
+      setTimeout(() => {
+        expect(observerCount).toBe(2);
+        expect(
+          notionServiceSpy.getRetrospectiveElements$
+        ).toHaveBeenCalledTimes(2);
+        expect(results).toEqual(reloadTestData);
+        done();
+      }, jasmine.DEFAULT_TIMEOUT_INTERVAL - 1000);
     });
   });
 });
