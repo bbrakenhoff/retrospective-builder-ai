@@ -7,7 +7,7 @@ import { TestDataFactory } from '../../../testing/test-data-factory';
 import { NotionService } from './notion.service';
 import { RetrospectiveElementService } from './retrospective-element.service';
 
-fdescribe('RetrospectiveService', () => {
+describe('RetrospectiveService', () => {
   const testData = {
     retrospectives: TestDataFactory.createRetrospectives(),
     retrospectiveElements: TestDataFactory.createRetrospectiveElements(),

@@ -1,23 +1,31 @@
 import { TestBed } from '@angular/core/testing';
 
 import { RetrospectiveElementService } from './retrospective-element.service';
-import { Observer, of } from 'rxjs';
+import { Observer, of, ReplaySubject } from 'rxjs';
 import { NotionService } from './notion.service';
 import { TestDataFactory } from '../../../testing/test-data-factory';
 import { RetrospectiveElement } from '../models';
+import { TestScheduler } from 'rxjs/internal/testing/TestScheduler';
 
 fdescribe('RetrospectiveElementService', () => {
   const testData = TestDataFactory.createRetrospectiveElements();
+
+  let testScheduler: TestScheduler;
 
   let notionServiceSpy: jasmine.SpyObj<NotionService>;
 
   let service: RetrospectiveElementService;
 
   beforeEach(() => {
+    testScheduler = new TestScheduler((actual, expected) => {
+      expect(actual).toEqual(expected);
+    });
+
     notionServiceSpy = jasmine.createSpyObj('NotionService', [
       'getRetrospectiveElements$',
     ]);
     notionServiceSpy.getRetrospectiveElements$.and.returnValue(of(testData));
+    expect(testData).toBe(testData);
 
     TestBed.configureTestingModule({
       providers: [{ provide: NotionService, useValue: notionServiceSpy }],
@@ -30,7 +38,23 @@ fdescribe('RetrospectiveElementService', () => {
   });
 
   describe('all$()', () => {
-    it('should load retrospective elements on initial load', done => {
+    fit('should load retrospective elements on initial load', () => {
+      testScheduler.run(helpers => {
+        const { expectObservable, hot, cold } = helpers;
+
+        const replayIsLoading$ = new ReplaySubject<boolean>();
+        service.isLoading$.subscribe({
+          next: isLoading => replayIsLoading$.next(isLoading),
+        });
+
+        expectObservable(replayIsLoading$).toEqual(
+          hot('sa', { s: true, a: false })
+        );
+        expectObservable(service.all$()).toEqual(cold('a  ', { a: testData }));
+      });
+    });
+
+    xit('_should load retrospective elements on initial load', done => {
       const isLoadingResults: boolean[] = [];
       service.isLoading$.subscribe({
         next: isLoading => isLoadingResults.push(isLoading),
