@@ -4,10 +4,10 @@ export interface RetrospectiveElement {
   id: string;
   createdTime: DateTime | null;
   lastEditedTime: DateTime | null;
-  theme: string;
+  theme: string | null;
   phase: string[];
   name: string;
-  link: string;
+  link: string | null;
   attendanceOptions: string[];
   usedInRetrospectiveIds: string[];
 }

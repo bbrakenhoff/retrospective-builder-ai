@@ -20,14 +20,14 @@ export class RetrospectiveService {
     private readonly retrospectiveElementService: RetrospectiveElementService
   ) {}
 
-  all$(): Observable<Retrospective[]> {
-    this.loadRetrospectives();
+  all$(force = false): Observable<Retrospective[]> {
+    this.reload(force);
     return this.cache$$.asObservable().pipe(share());
   }
 
-  pastRetrospectives$(): Observable<Retrospective[]> {
+  pastRetrospectives$(force = false): Observable<Retrospective[]> {
     const today = DateTime.now().startOf('day');
-    return this.all$().pipe(
+    return this.all$(force).pipe(
       map(retrospectives =>
         (retrospectives ?? [])
           .filter(
@@ -39,30 +39,26 @@ export class RetrospectiveService {
     );
   }
 
-  unplannedRetrospectives$(): Observable<Retrospective[]> {
-    return this.all$().pipe(
+  unplannedRetrospectives$(force = false): Observable<Retrospective[]> {
+    return this.all$(force).pipe(
       map(retrospectives =>
         (retrospectives ?? []).filter(retrospective => !retrospective.date)
       )
     );
   }
 
-  private loadRetrospectives(force = false): void {
-    if (force || this.cacheIsEmpty) {
+  reload(force = false): void {
+    if (force || this.cache$$.value.length === 0) {
       this.isLoading$$.next(true);
 
       combineLatest({
-        retrospectives: this.notionService.getRetrospectives$(),
-        elements: this.retrospectiveElementService.all$(),
+        retrospectives: this.notionService.getRetrospectives$().pipe(take(1)),
+        elements: this.retrospectiveElementService.all$().pipe(take(1)),
       })
-        .pipe(take(1))
+        .pipe(take(1), share())
         .subscribe({
           next: ({ retrospectives, elements }) => {
-            const retrospectivesWithPhases = retrospectives.map(retrospective =>
-              this.populateRetrospectiveWithPhases(retrospective, elements)
-            );
-            this.cache$$.next(retrospectivesWithPhases);
-            this.isLoading$$.next(false);
+            this.updateCache(retrospectives, elements);
           },
           error: e => {
             console.error(`🩷Bijoya - retrospective.service.ts > 69 error`, e);
@@ -71,8 +67,15 @@ export class RetrospectiveService {
     }
   }
 
-  private get cacheIsEmpty(): boolean {
-    return this.cache$$.value.length === 0;
+  private updateCache(
+    retrospectives: Retrospective[],
+    elements: RetrospectiveElement[]
+  ) {
+    const retrospectivesWithPhases = retrospectives.map(retrospective =>
+      this.populateRetrospectiveWithPhases(retrospective, elements)
+    );
+    this.cache$$.next(retrospectivesWithPhases);
+    this.isLoading$$.next(false);
   }
 
   private populateRetrospectiveWithPhases(
