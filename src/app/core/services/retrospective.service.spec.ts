@@ -6,7 +6,6 @@ import { Retrospective } from '../models';
 import { TestDataFactory } from '../../../testing/test-data-factory';
 import { NotionService } from './notion.service';
 import { RetrospectiveElementService } from './retrospective-element.service';
-import * as test from 'node:test';
 
 fdescribe('RetrospectiveService', () => {
   const testData = {
@@ -133,7 +132,7 @@ fdescribe('RetrospectiveService', () => {
       };
 
       service.all$().subscribe(observer);
-      service.reload();
+      service.reload(true);
     });
   });
 });
