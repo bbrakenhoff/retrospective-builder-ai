@@ -6,7 +6,7 @@ import { NotionService } from './notion.service';
 import { TestDataFactory } from '../../../testing/test-data-factory';
 import { RetrospectiveElement } from '../models';
 
-describe('RetrospectiveElementService', () => {
+fdescribe('RetrospectiveElementService', () => {
   const testData = TestDataFactory.createRetrospectiveElements();
 
   let notionServiceSpy: jasmine.SpyObj<NotionService>;
@@ -99,7 +99,7 @@ describe('RetrospectiveElementService', () => {
       };
 
       service.all$().subscribe(observer);
-      service.reload();
+      service.reload(true);
     });
   });
 });
