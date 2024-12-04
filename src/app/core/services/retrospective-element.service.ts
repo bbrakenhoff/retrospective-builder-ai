@@ -16,7 +16,7 @@ export class RetrospectiveElementService {
 
   all$(force = false): Observable<RetrospectiveElement[]> {
     this.reload(force);
-    return this.cache$$.asObservable().pipe(share());
+    return this.cache$$.asObservable();
   }
 
   reload(force = false): void {
@@ -24,7 +24,7 @@ export class RetrospectiveElementService {
       this.isLoading$$.next(true);
       this.notionService
         .getRetrospectiveElements$()
-        .pipe(take(1), share())
+        .pipe(take(1))
         .subscribe({
           next: elements => {
             this.cache$$.next(elements);

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { RetrospectiveElementService } from './retrospective-element.service';
-import { Observer, of, ReplaySubject } from 'rxjs';
+import { of, ReplaySubject } from 'rxjs';
 import { NotionService } from './notion.service';
 import { TestDataFactory } from '../../../testing/test-data-factory';
 import { RetrospectiveElement } from '../models';
@@ -38,7 +38,7 @@ fdescribe('RetrospectiveElementService', () => {
   });
 
   describe('all$()', () => {
-    fit('should load retrospective elements on initial load', () => {
+    it('should load retrospective elements on initial load', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         const replayIsLoading$$ = new ReplaySubject<boolean>();
         service.isLoading$.subscribe({
@@ -52,8 +52,10 @@ fdescribe('RetrospectiveElementService', () => {
         );
       });
     });
+  });
 
-    fit('should reload retrospective elements when reload is called where force is true', () => {
+  describe('reload()', () => {
+    it('should reload retrospective elements when reload is called where force is true', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         const initialTestData = testData.slice(0, 2);
         const reloadTestData = testData.slice(2);
@@ -85,7 +87,7 @@ fdescribe('RetrospectiveElementService', () => {
       });
     });
 
-    fit('should reload retrospectiveelements when reload is called where force is false and cache not empty', () => {
+    it('should not reload retrospective elements when reload is called where force is false and cache not empty', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         const initialTestData = testData.slice(0, 2);
         const reloadTestData = testData.slice(2);
@@ -114,93 +116,47 @@ fdescribe('RetrospectiveElementService', () => {
         expectObservable(replayIsLoading$$).toEqual(
           cold('(ilc)', { i: false, l: true, c: false })
         );
-      });
-    });
-    xit('should reload retrospectiveelements when reload is called where force is false and cache not empty', done => {
-      const initialTestData = testData.slice(0, 2);
-      const reloadTestData = testData.slice(2);
 
-      notionServiceSpy.getRetrospectiveElements$.and.returnValues(
-        of(initialTestData),
-        of(reloadTestData)
-      );
-      let observerCount = 0;
-      let results: RetrospectiveElement[] = [];
-      const observer: Observer<RetrospectiveElement[]> = {
-        error: done.fail,
-        complete: done,
-        next: elements => {
-          observerCount++;
-          results = elements;
-        },
-      };
-
-      service.all$().subscribe(observer);
-      service.reload();
-
-      setTimeout(() => {
-        expect(observerCount).toBe(1);
         expect(
           notionServiceSpy.getRetrospectiveElements$
         ).toHaveBeenCalledTimes(1);
-        expect(results).toEqual(initialTestData);
-        done();
-      }, 1000);
+      });
     });
 
-    xit('should share the same observable instance among multiple subscribers', done => {
-      notionServiceSpy.getRetrospectiveElements$.and.returnValue(of(testData));
+    it('should reload retrospective elements when reload is called where force is false and cache is empty', () => {
+      testScheduler.run(({ expectObservable, cold }) => {
+        const initialTestData: RetrospectiveElement[] = [];
+        const reloadTestData = testData;
 
-      service.all$().subscribe({
-        next: elements => {
-          expect(elements).toEqual(testData);
-        },
-      });
+        notionServiceSpy.getRetrospectiveElements$.and.returnValues(
+          of(initialTestData),
+          of(reloadTestData)
+        );
 
-      service.all$().subscribe({
-        next: elements => {
-          expect(elements).toEqual(testData);
-          done();
-        },
-      });
+        const replayIsLoading$$ = new ReplaySubject<boolean>();
+        service.isLoading$.subscribe({
+          next: isLoading => replayIsLoading$$.next(isLoading),
+        });
 
-      expect(notionServiceSpy.getRetrospectiveElements$).toHaveBeenCalledTimes(
-        1
-      );
-    });
+        const replayResults$ = new ReplaySubject<RetrospectiveElement[]>();
+        service.all$().subscribe({
+          next: results => replayResults$.next(results),
+        });
 
-    xit('should reload retrospective elements when reload is called where force is false but cache is empty', done => {
-      const initialTestData: RetrospectiveElement[] = [];
-      const reloadTestData = testData;
+        service.reload();
 
-      notionServiceSpy.getRetrospectiveElements$.and.returnValues(
-        of(initialTestData),
-        of(reloadTestData)
-      );
-      let observerCount = 0;
-      let results: RetrospectiveElement[] = [];
-      const observer: Observer<RetrospectiveElement[]> = {
-        error: done.fail,
-        complete: () => {
-          // noop
-        },
-        next: elements => {
-          results = elements;
-          observerCount++;
-        },
-      };
+        expectObservable(replayResults$).toEqual(
+          cold('(lr)', { l: initialTestData, r: reloadTestData })
+        );
 
-      service.all$().subscribe(observer);
-      service.reload();
+        expectObservable(replayIsLoading$$).toEqual(
+          cold('(ilcrf)', { i: false, l: true, c: false, r: true, f: false })
+        );
 
-      setTimeout(() => {
-        expect(observerCount).toBe(2);
         expect(
           notionServiceSpy.getRetrospectiveElements$
         ).toHaveBeenCalledTimes(2);
-        expect(results).toEqual(reloadTestData);
-        done();
-      }, jasmine.DEFAULT_TIMEOUT_INTERVAL - 1000);
+      });
     });
   });
 });
