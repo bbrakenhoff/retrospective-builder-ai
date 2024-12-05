@@ -25,7 +25,6 @@ fdescribe('RetrospectiveElementService', () => {
       'getRetrospectiveElements$',
     ]);
     notionServiceSpy.getRetrospectiveElements$.and.returnValue(of(testData));
-    expect(testData).toBe(testData);
 
     TestBed.configureTestingModule({
       providers: [{ provide: NotionService, useValue: notionServiceSpy }],

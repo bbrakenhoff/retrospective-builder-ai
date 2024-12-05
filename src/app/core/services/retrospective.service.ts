@@ -48,7 +48,7 @@ export class RetrospectiveService {
   }
 
   reload(force = false): void {
-    if (force || this.cache$$.value.length === 0) {
+    if (!this.isLoading$$.value && (force || this.cache$$.value.length === 0)) {
       this.isLoading$$.next(true);
 
       combineLatest({
