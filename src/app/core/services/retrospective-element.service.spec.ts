@@ -123,6 +123,34 @@ fdescribe('RetrospectiveElementService', () => {
       });
     });
 
+    it('should not reload when already loading', () => {
+      testScheduler.run(({ expectObservable, cold }) => {
+        const initialTestData: RetrospectiveElement[] = [];
+        const reloadTestData = testData;
+
+        notionServiceSpy.getRetrospectiveElements$.and.returnValues(
+          cold('(---a)', { a: initialTestData }),
+          cold('(---b)', { b: reloadTestData })
+        );
+
+        const replayIsLoading$$ = new ReplaySubject<boolean>();
+        service.isLoading$.subscribe({
+          next: isLoading => replayIsLoading$$.next(isLoading),
+        });
+
+        service.reload();
+        service.reload();
+
+        expectObservable(replayIsLoading$$).toEqual(
+          cold('(ilc)', { i: false, l: true, c: false })
+        );
+
+        expect(
+          notionServiceSpy.getRetrospectiveElements$
+        ).toHaveBeenCalledTimes(1);
+      });
+    });
+
     it('should reload retrospective elements when reload is called where force is false and cache is empty', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         const initialTestData: RetrospectiveElement[] = [];
