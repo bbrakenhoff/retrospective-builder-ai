@@ -1,34 +1,9 @@
-import { readFileSync } from 'fs';
 import { Retrospective, RetrospectiveElement } from '../app/core/models';
 import { DateTime } from 'luxon';
-
-type AttendanceOption = 'Online' | 'Offline';
-
-export interface RetrospectiveElementStub {
-  id: string;
-  name: string;
-  theme: string | null;
-  link: string | null;
-  attendanceOptions: AttendanceOption[];
-  phase: string[];
-}
-
-export interface RetrospectiveStub {
-  id: string;
-  sprint: string;
-  team: string;
-  date: DateTime | null;
-  url: string;
-  phases: {
-    setTheStage: RetrospectiveElementStub | null;
-    gatherData: RetrospectiveElementStub | null;
-    generateInsights: RetrospectiveElementStub | null;
-    decideWhatToDo: RetrospectiveElementStub | null;
-    closing: RetrospectiveElementStub | null;
-  };
-  createdTime: DateTime;
-  lastEditedTime: DateTime;
-}
+import { RetrospectiveStub } from './retrospective.stub';
+import { RetrospectiveElementStub } from './retrospective-element.stub';
+import { testRetrospectiveElements } from './data/retrospective-elements';
+import { testRetrospectives } from './data/retrospectives';
 
 interface TestData {
   retrospectives: RetrospectiveStub[];
@@ -36,17 +11,27 @@ interface TestData {
 }
 
 class TestDataStore {
-  private testData: TestData;
+  private static readonly TEST_RETROSPECTIVE_ELEMENTS_JSONC =
+    'src/testing/retrosective-elements.jsonc';
+  private static readonly TEST_RETROSPECTIVE_JSONC =
+    'src/testing/retrosectives.jsonc';
 
-  constructor(private testDataFile = 'src/testing/test-data.jsonc') {
-    const testDataContent = readFileSync(this.testDataFile, 'utf8');
-    this.testData = JSON.parse(testDataContent) as TestData;
+  private readonly testData: TestData;
+
+  constructor() {
+    this.testData = {
+      retrospectiveElements: testRetrospectiveElements,
+      retrospectives: testRetrospectives,
+    };
   }
 
-  getRetrospectiveElements(): RetrospectiveElement[] {
-    return this.testData.retrospectiveElements.map(stub =>
-      this.mapRetrospectiveElementStubToModel(stub)
-    );
+  getRetrospectiveElements(
+    startIndex = 0,
+    endIndex = this.testData.retrospectiveElements.length - 1
+  ): RetrospectiveElement[] {
+    return this.testData.retrospectiveElements
+      .slice(startIndex, endIndex)
+      .map(stub => this.mapRetrospectiveElementStubToModel(stub));
   }
 
   private mapRetrospectiveElementStubToModel(
@@ -109,10 +94,10 @@ class TestDataStore {
       id: stub.id,
       sprint: stub.sprint,
       team: stub.team,
-      date: stub.date,
+      date: stub.date ? DateTime.fromISO(stub.date, { zone: 'utc' }) : null,
       url: stub.url,
-      createdTime: stub.createdTime,
-      lastEditedTime: stub.lastEditedTime,
+      createdTime: DateTime.fromISO(stub.createdTime, { zone: 'utc' }),
+      lastEditedTime: DateTime.fromISO(stub.lastEditedTime, { zone: 'utc' }),
       phases: {
         setTheStage:
           stub.phases.setTheStage !== null
