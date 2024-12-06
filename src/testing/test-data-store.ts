@@ -11,11 +11,6 @@ interface TestData {
 }
 
 class TestDataStore {
-  private static readonly TEST_RETROSPECTIVE_ELEMENTS_JSONC =
-    'src/testing/retrosective-elements.jsonc';
-  private static readonly TEST_RETROSPECTIVE_JSONC =
-    'src/testing/retrosectives.jsonc';
-
   private readonly testData: TestData;
 
   constructor() {
@@ -35,19 +30,33 @@ class TestDataStore {
   }
 
   private mapRetrospectiveElementStubToModel(
-    stub: RetrospectiveElementStub
+    stub: RetrospectiveElementStub | string
   ): RetrospectiveElement {
-    return {
-      id: stub.id,
-      name: stub.name,
-      theme: stub.theme,
-      link: stub.link,
-      attendanceOptions: stub.attendanceOptions,
-      phase: stub.phase,
-      createdTime: DateTime.now(),
-      lastEditedTime: DateTime.now(),
-      usedInRetrospectiveIds: [],
-    };
+    if (typeof stub === 'string') {
+      return {
+        id: stub,
+        name: '',
+        theme: '',
+        link: '',
+        attendanceOptions: [],
+        phase: [],
+        createdTime: DateTime.now(),
+        lastEditedTime: DateTime.now(),
+        usedInRetrospectiveIds: [],
+      };
+    } else {
+      return {
+        id: stub.id,
+        name: stub.name,
+        theme: stub.theme,
+        link: stub.link,
+        attendanceOptions: stub.attendanceOptions,
+        phase: stub.phase,
+        createdTime: DateTime.now(),
+        lastEditedTime: DateTime.now(),
+        usedInRetrospectiveIds: [],
+      };
+    }
   }
 
   findRetrospectiveElement(

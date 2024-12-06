@@ -8,11 +8,11 @@ export interface RetrospectiveStub {
   date: string | null;
   url: string;
   phases: {
-    setTheStage: RetrospectiveElementStub | null;
-    gatherData: RetrospectiveElementStub | null;
-    generateInsights: RetrospectiveElementStub | null;
-    decideWhatToDo: RetrospectiveElementStub | null;
-    closing: RetrospectiveElementStub | null;
+    setTheStage: RetrospectiveElementStub | string | null;
+    gatherData: RetrospectiveElementStub | string | null;
+    generateInsights: RetrospectiveElementStub | string | null;
+    decideWhatToDo: RetrospectiveElementStub | string | null;
+    closing: RetrospectiveElementStub | string | null;
   };
   createdTime: string;
   lastEditedTime: string;

@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { of, ReplaySubject } from 'rxjs';
 import { TestScheduler } from 'rxjs/internal/testing/TestScheduler';
 import { testDataStore } from '../../../testing/test-data-store';
@@ -10,7 +9,7 @@ import { RetrospectiveElementService } from './retrospective-element.service';
 fdescribe('RetrospectiveElementService', () => {
   const testData = {
     initialRetrospectiveElements: testDataStore.getRetrospectiveElements(0, 10),
-    reloadRetrosectiveElements: testDataStore.getRetrospectiveElements(10, 19),
+    reloadRetrospectiveElements: testDataStore.getRetrospectiveElements(10, 19),
   };
 
   let testScheduler: TestScheduler;
@@ -29,7 +28,7 @@ fdescribe('RetrospectiveElementService', () => {
     ]);
     notionServiceSpy.getRetrospectiveElements$.and.returnValues(
       of(testData.initialRetrospectiveElements),
-      of(testData.reloadRetrosectiveElements)
+      of(testData.reloadRetrospectiveElements)
     );
 
     TestBed.configureTestingModule({
@@ -64,11 +63,6 @@ fdescribe('RetrospectiveElementService', () => {
   describe('reload()', () => {
     it('should reload retrospective elements when reload is called where force is true', () => {
       testScheduler.run(({ expectObservable, cold }) => {
-        notionServiceSpy.getRetrospectiveElements$.and.returnValues(
-          of(testData.initialRetrospectiveElements),
-          of(testData.reloadRetrosectiveElements)
-        );
-
         const replayIsLoading$$ = new ReplaySubject<boolean>();
         service.isLoading$.subscribe({
           next: isLoading => replayIsLoading$$.next(isLoading),
@@ -84,7 +78,7 @@ fdescribe('RetrospectiveElementService', () => {
         expectObservable(replayResults$).toEqual(
           cold('(lr)', {
             l: testData.initialRetrospectiveElements,
-            r: testData.reloadRetrosectiveElements,
+            r: testData.reloadRetrospectiveElements,
           })
         );
 
@@ -126,7 +120,7 @@ fdescribe('RetrospectiveElementService', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         notionServiceSpy.getRetrospectiveElements$.and.returnValues(
           cold('(---a)', { a: [] }),
-          cold('(---b)', { b: testData.reloadRetrosectiveElements })
+          cold('(---b)', { b: testData.reloadRetrospectiveElements })
         );
 
         const replayIsLoading$$ = new ReplaySubject<boolean>();
@@ -151,7 +145,7 @@ fdescribe('RetrospectiveElementService', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         notionServiceSpy.getRetrospectiveElements$.and.returnValues(
           of([]),
-          of(testData.reloadRetrosectiveElements)
+          of(testData.reloadRetrospectiveElements)
         );
 
         const replayIsLoading$$ = new ReplaySubject<boolean>();
@@ -167,7 +161,7 @@ fdescribe('RetrospectiveElementService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('(lr)', { l: [], r: testData.reloadRetrosectiveElements })
+          cold('(lr)', { l: [], r: testData.reloadRetrospectiveElements })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
