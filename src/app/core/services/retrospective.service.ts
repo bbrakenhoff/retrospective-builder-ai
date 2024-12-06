@@ -22,7 +22,7 @@ export class RetrospectiveService {
 
   all$(force = false): Observable<Retrospective[]> {
     this.reload(force);
-    return this.cache$$.asObservable().pipe(share());
+    return this.cache$$.asObservable();
   }
 
   pastRetrospectives$(force = false): Observable<Retrospective[]> {
@@ -55,7 +55,7 @@ export class RetrospectiveService {
         retrospectives: this.notionService.getRetrospectives$().pipe(take(1)),
         elements: this.retrospectiveElementService.all$().pipe(take(1)),
       })
-        .pipe(take(1), share())
+        .pipe(take(1))
         .subscribe({
           next: ({ retrospectives, elements }) => {
             this.updateCache(retrospectives, elements);
@@ -71,6 +71,7 @@ export class RetrospectiveService {
     retrospectives: Retrospective[],
     elements: RetrospectiveElement[]
   ) {
+    console.log(retrospectives, elements);
     const retrospectivesWithPhases = retrospectives.map(retrospective =>
       this.populateRetrospectiveWithPhases(retrospective, elements)
     );
@@ -113,6 +114,10 @@ export class RetrospectiveService {
     id: string,
     elements: RetrospectiveElement[]
   ): RetrospectiveElement | null {
-    return elements.find(element => element.id === id) ?? null;
+    return (
+      elements
+        // TODO : Filter on usedInRetrospectiveIds .filter(element => element.usedInRetrospectiveIds.includes(id))
+        .find(element => element.id === id) ?? null
+    );
   }
 }

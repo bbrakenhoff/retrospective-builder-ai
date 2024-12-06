@@ -6,7 +6,7 @@ import { testRetrospectiveElements } from './data/retrospective-elements';
 import { testRetrospectives } from './data/retrospectives';
 
 interface TestData {
-  retrospectives: RetrospectiveStub[];
+  retrospectives: { full: RetrospectiveStub[]; refOnly: RetrospectiveStub[] };
   retrospectiveElements: RetrospectiveElementStub[];
 }
 
@@ -22,7 +22,7 @@ class TestDataStore {
 
   getRetrospectiveElements(
     startIndex = 0,
-    endIndex = this.testData.retrospectiveElements.length - 1
+    endIndex = this.testData.retrospectiveElements.length
   ): RetrospectiveElement[] {
     return this.testData.retrospectiveElements
       .slice(startIndex, endIndex)
@@ -92,10 +92,17 @@ class TestDataStore {
     );
   }
 
-  getRetrospectives(): Retrospective[] {
-    return this.testData.retrospectives.map(stub =>
-      this.mapRetrospectiveStubToModel(stub)
-    );
+  getRetrospectives({
+    startIndex = 0,
+    endIndex = this.testData.retrospectiveElements.length / 2 - 1,
+    full = false,
+  }): Retrospective[] {
+    const retrospectives = full
+      ? this.testData.retrospectives.full
+      : this.testData.retrospectives.refOnly;
+    return retrospectives
+      .slice(startIndex, endIndex)
+      .map(stub => this.mapRetrospectiveStubToModel(stub));
   }
 
   private mapRetrospectiveStubToModel(stub: RetrospectiveStub): Retrospective {
