@@ -50,11 +50,11 @@ describe('RetrospectiveElementService', () => {
         });
 
         expectObservable(service.all$()).toEqual(
-          cold('a', { a: testData.initialRetrospectiveElements })
+          cold('1', { 1: testData.initialRetrospectiveElements })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
-          cold('(abc)', { a: false, b: true, c: false })
+          cold('(ilc)', { i: false, l: true, c: false })
         );
       });
     });
@@ -76,9 +76,9 @@ describe('RetrospectiveElementService', () => {
         service.reload(true);
 
         expectObservable(replayResults$).toEqual(
-          cold('(lr)', {
-            l: testData.initialRetrospectiveElements,
-            r: testData.reloadRetrospectiveElements,
+          cold('(12)', {
+            1: testData.initialRetrospectiveElements,
+            2: testData.reloadRetrospectiveElements,
           })
         );
 
@@ -103,11 +103,11 @@ describe('RetrospectiveElementService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('a', { a: testData.initialRetrospectiveElements })
+          cold('1', { 1: testData.initialRetrospectiveElements })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
-          cold('(abc)', { a: false, b: true, c: false })
+          cold('(ilc)', { i: false, l: true, c: false })
         );
 
         expect(
@@ -119,8 +119,8 @@ describe('RetrospectiveElementService', () => {
     it('should not reload when already loading', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         notionServiceSpy.getRetrospectiveElements$.and.returnValues(
-          cold('(---a)', { a: [] }),
-          cold('(---b)', { b: testData.reloadRetrospectiveElements })
+          cold('(---1)', { 1: [] }),
+          cold('(---2)', { 2: testData.reloadRetrospectiveElements })
         );
 
         const replayIsLoading$$ = new ReplaySubject<boolean>();
@@ -161,7 +161,7 @@ describe('RetrospectiveElementService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('(lr)', { l: [], r: testData.reloadRetrospectiveElements })
+          cold('(12)', { 1: [], 2: testData.reloadRetrospectiveElements })
         );
 
         expectObservable(replayIsLoading$$).toEqual(

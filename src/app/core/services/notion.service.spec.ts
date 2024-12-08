@@ -82,7 +82,7 @@ describe('NotionService', () => {
     it('should get retrospective elements', () => {
       testScheduler.run(({ expectObservable, cold, flush }) => {
         expectObservable(service.getRetrospectiveElements$()).toEqual(
-          cold('(r|)', { r: testData.elements })
+          cold('(1|)', { 1: testData.elements })
         );
 
         flush();
@@ -105,7 +105,7 @@ describe('NotionService', () => {
     it('should get retrospectives', () => {
       testScheduler.run(({ expectObservable, cold, flush }) => {
         expectObservable(service.getRetrospectives$()).toEqual(
-          cold('(r|)', { r: testData.retrospectives })
+          cold('(1|)', { 1: testData.retrospectives })
         );
 
         flush();

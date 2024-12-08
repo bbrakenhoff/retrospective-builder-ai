@@ -69,7 +69,7 @@ describe('RetrospectiveService', () => {
         });
 
         expectObservable(service.all$()).toEqual(
-          cold('r', { r: testData.initialRetrospectivesFull })
+          cold('1', { 1: testData.initialRetrospectivesFull })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
@@ -95,9 +95,9 @@ describe('RetrospectiveService', () => {
         service.reload(true);
 
         expectObservable(replayResults$).toEqual(
-          cold('(lr)', {
-            l: testData.initialRetrospectivesFull,
-            r: testData.reloadedRetrospectivesFull,
+          cold('(12)', {
+            1: testData.initialRetrospectivesFull,
+            2: testData.reloadedRetrospectivesFull,
           })
         );
 
@@ -122,11 +122,11 @@ describe('RetrospectiveService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('a', { a: testData.initialRetrospectivesFull })
+          cold('1', { 1: testData.initialRetrospectivesFull })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
-          cold('(abc)', { a: false, b: true, c: false })
+          cold('(ilc)', { i: false, l: true, c: false })
         );
 
         expect(notionServiceSpy.getRetrospectives$).toHaveBeenCalledTimes(1);
@@ -136,8 +136,8 @@ describe('RetrospectiveService', () => {
     it('should not reload when already loading', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         notionServiceSpy.getRetrospectives$.and.returnValues(
-          cold('(---a)', { a: [] }),
-          cold('(---b)', { b: testData.reloadedRetrospectivesRefOnly })
+          cold('(---0)', { 0: [] }),
+          cold('(---1)', { 1: testData.reloadedRetrospectivesRefOnly })
         );
 
         const replayIsLoading$$ = new ReplaySubject<boolean>();
@@ -176,7 +176,7 @@ describe('RetrospectiveService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('(lr)', { l: [], r: testData.reloadedRetrospectivesFull })
+          cold('(12)', { 1: [], 2: testData.reloadedRetrospectivesFull })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
