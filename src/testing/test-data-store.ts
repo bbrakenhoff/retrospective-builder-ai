@@ -4,6 +4,7 @@ import { RetrospectiveStub } from './retrospective.stub';
 import { RetrospectiveElementStub } from './retrospective-element.stub';
 import { testRetrospectiveElements } from './data/retrospective-elements';
 import { testRetrospectives } from './data/retrospectives';
+import { NotionPage, NotionQueryResponse } from '../app/core/types';
 
 interface TestData {
   retrospectives: { full: RetrospectiveStub[]; refOnly: RetrospectiveStub[] };
@@ -59,39 +60,6 @@ class TestDataStore {
     }
   }
 
-  findRetrospectiveElement(
-    id?: string,
-    name?: string,
-    theme?: string,
-    attendanceOption?: string,
-    phase?: string,
-    retrospectiveId?: string
-  ): RetrospectiveElement | null {
-    return (
-      this.getRetrospectiveElements().find(element => {
-        const idMatch = id === undefined || element.id === id;
-        const nameMatch = name === undefined || element.name === name;
-        const themeMatch = theme === undefined || element.theme === theme;
-        const attendanceOptionMatch =
-          attendanceOption === undefined ||
-          element.attendanceOptions.includes(attendanceOption);
-        const phaseMatch = phase === undefined || element.phase.includes(phase);
-        const retrospectiveIdMatch =
-          retrospectiveId === undefined ||
-          element.usedInRetrospectiveIds.includes(retrospectiveId);
-
-        return (
-          idMatch &&
-          nameMatch &&
-          themeMatch &&
-          attendanceOptionMatch &&
-          phaseMatch &&
-          retrospectiveIdMatch
-        );
-      }) ?? null
-    );
-  }
-
   getRetrospectives({
     startIndex = 0,
     endIndex = this.testData.retrospectiveElements.length / 2 - 1,
@@ -139,6 +107,35 @@ class TestDataStore {
           stub.phases.closing !== null
             ? this.mapRetrospectiveElementStubToModel(stub.phases.closing)
             : null,
+      },
+    };
+  }
+
+  getRetrospectiveElementsQueryResponse(): NotionQueryResponse {
+    const results = this.testData.retrospectiveElements.map(stub =>
+      this.mapRetrospectiveElementToNotionPage(stub)
+    );
+    return { results };
+  }
+
+  private mapRetrospectiveElementToNotionPage(stub: RetrospectiveElementStub) {
+    return {
+      id: stub.id,
+      created_time: DateTime.now().toISO(),
+      last_edited_time: DateTime.now().toISO(),
+      url: `http://test.notion/${stub.id}`,
+      properties: {
+        Theme: stub.theme ? { select: { name: stub.theme } } : undefined,
+        Phase: stub.phase ? { multi_select: stub.phase } : undefined,
+        Name: stub.name
+          ? { title: [{ text: { content: stub.name } }] }
+          : undefined,
+        Link: stub.link
+          ? { rich_text: [{ text: { content: stub.link } }] }
+          : undefined,
+        'Attendance options': stub.attendanceOptions
+          ? { multi_select: stub.attendanceOptions }
+          : undefined,
       },
     };
   }

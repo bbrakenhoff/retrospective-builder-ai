@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from '@notionhq/client';
-import { Observable, from, map, tap, share } from 'rxjs';
+import { from, map, Observable, share } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { RetrospectiveElementAdapter } from '../adapters/retrospective-element.adapter';
 import { RetrospectiveElement } from '../models/retrospective-element.model';
@@ -12,16 +12,11 @@ import { Retrospective } from '../models';
   providedIn: 'root',
 })
 export class NotionService {
-  private readonly notion: Client;
-
   constructor(
+    private readonly notion: Client,
     private readonly retrospectiveElementAdapter: RetrospectiveElementAdapter,
     private readonly retrospectiveAdapter: RetrospectiveAdapter
-  ) {
-    this.notion = new Client({
-      auth: environment.notion.apiKey,
-    });
-  }
+  ) {}
 
   getRetrospectiveElements$(): Observable<RetrospectiveElement[]> {
     return from(
@@ -33,8 +28,7 @@ export class NotionService {
         this.retrospectiveElementAdapter.fromNotionResponse(
           response as NotionQueryResponse
         )
-      ),
-      share()
+      )
     );
   }
 
@@ -48,8 +42,7 @@ export class NotionService {
         this.retrospectiveAdapter.mapNotionResponseToRetrospectives(
           response as NotionQueryResponse
         )
-      ),
-      share()
+      )
     );
   }
 }

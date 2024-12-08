@@ -6,7 +6,7 @@ import { NotionService } from './notion.service';
 import { RetrospectiveService } from './retrospective.service';
 import { testDataStore } from '../../../testing/test-data-store';
 
-fdescribe('RetrospectiveService', () => {
+describe('RetrospectiveService', () => {
   const testData = {
     initialRetrospectives: testDataStore.getRetrospectives({
       startIndex: 0,

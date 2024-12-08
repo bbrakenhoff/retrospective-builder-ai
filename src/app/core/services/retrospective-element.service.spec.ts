@@ -6,7 +6,7 @@ import { RetrospectiveElement } from '../models';
 import { NotionService } from './notion.service';
 import { RetrospectiveElementService } from './retrospective-element.service';
 
-fdescribe('RetrospectiveElementService', () => {
+describe('RetrospectiveElementService', () => {
   const testData = {
     initialRetrospectiveElements: testDataStore.getRetrospectiveElements(0, 10),
     reloadRetrospectiveElements: testDataStore.getRetrospectiveElements(10, 19),
