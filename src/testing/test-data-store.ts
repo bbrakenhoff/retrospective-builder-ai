@@ -60,16 +60,24 @@ class TestDataStore {
     }
   }
 
-  getRetrospectives({
-    startIndex = 0,
-    endIndex = this.testData.retrospectiveElements.length / 2 - 1,
-    full = false,
+  getRetrospectives(options?: {
+    startIndex?: number;
+    endIndex?: number;
+    full?: boolean;
   }): Retrospective[] {
-    const retrospectives = full
+    if (!options) {
+      options = {};
+    }
+    options.startIndex = options.startIndex ?? 0;
+    options.endIndex =
+      options.endIndex ?? this.testData.retrospectives.refOnly.length / 2 - 1;
+    options.full = options.full ?? false;
+
+    const retrospectives = options.full
       ? this.testData.retrospectives.full
       : this.testData.retrospectives.refOnly;
     return retrospectives
-      .slice(startIndex, endIndex)
+      .slice(options.startIndex, options.endIndex)
       .map(stub => this.mapRetrospectiveStubToModel(stub));
   }
 
@@ -113,12 +121,14 @@ class TestDataStore {
 
   getRetrospectiveElementsQueryResponse(): NotionQueryResponse {
     const results = this.testData.retrospectiveElements.map(stub =>
-      this.mapRetrospectiveElementToNotionPage(stub)
+      this.mapRetrospectiveElementStubToNotionPage(stub)
     );
     return { results };
   }
 
-  private mapRetrospectiveElementToNotionPage(stub: RetrospectiveElementStub) {
+  private mapRetrospectiveElementStubToNotionPage(
+    stub: RetrospectiveElementStub
+  ) {
     return {
       id: stub.id,
       created_time: DateTime.now().toISO(),
@@ -135,6 +145,30 @@ class TestDataStore {
           : undefined,
         'Attendance options': stub.attendanceOptions
           ? { multi_select: stub.attendanceOptions }
+          : undefined,
+      },
+    };
+  }
+
+  getRetrospectivesQueryResponse(): NotionQueryResponse {
+    const results = this.testData.retrospectives.refOnly.map(stub =>
+      this.mapRetrospectiveStubToNotionPage(stub)
+    );
+    return { results };
+  }
+
+  private mapRetrospectiveStubToNotionPage(
+    stub: RetrospectiveStub
+  ): NotionPage {
+    return {
+      id: stub.id,
+      created_time: DateTime.now().toISO(),
+      last_edited_time: DateTime.now().toISO(),
+      url: `http://test.notion/${stub.id}`,
+      properties: {
+        // Map properties from RetrospectiveStub to NotionPage properties
+        Name: stub.sprint
+          ? { title: [{ text: { content: stub.sprint } }] }
           : undefined,
       },
     };

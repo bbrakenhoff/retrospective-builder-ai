@@ -22,6 +22,7 @@ export class RetrospectiveElementService {
   reload(force = false): void {
     if (!this.isLoading$$.value && (force || this.cache$$.value.length === 0)) {
       this.isLoading$$.next(true);
+
       this.notionService
         .getRetrospectiveElements$()
         .pipe(take(1))

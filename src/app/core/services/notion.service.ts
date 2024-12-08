@@ -25,7 +25,7 @@ export class NotionService {
       })
     ).pipe(
       map(response =>
-        this.retrospectiveElementAdapter.fromNotionResponse(
+        this.retrospectiveElementAdapter.mapNotionResponseToRetrospectives(
           response as NotionQueryResponse
         )
       )

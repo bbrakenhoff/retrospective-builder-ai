@@ -9,7 +9,7 @@ import { RetrospectiveElementService } from './retrospective-element.service';
 describe('RetrospectiveElementService', () => {
   const testData = {
     initialRetrospectiveElements: testDataStore.getRetrospectiveElements(0, 10),
-    reloadRetrospectiveElements: testDataStore.getRetrospectiveElements(10, 19),
+    reloadRetrospectiveElements: testDataStore.getRetrospectiveElements(10),
   };
 
   let testScheduler: TestScheduler;
@@ -50,11 +50,11 @@ describe('RetrospectiveElementService', () => {
         });
 
         expectObservable(service.all$()).toEqual(
-          cold('r', { r: testData.initialRetrospectiveElements })
+          cold('a', { a: testData.initialRetrospectiveElements })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
-          cold('(ilc)', { i: false, l: true, c: false })
+          cold('(abc)', { a: false, b: true, c: false })
         );
       });
     });
@@ -103,11 +103,11 @@ describe('RetrospectiveElementService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('l', { l: testData.initialRetrospectiveElements })
+          cold('a', { a: testData.initialRetrospectiveElements })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
-          cold('(ilc)', { i: false, l: true, c: false })
+          cold('(abc)', { a: false, b: true, c: false })
         );
 
         expect(

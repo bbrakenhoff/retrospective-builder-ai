@@ -8,7 +8,7 @@ import {
   NotionRetrospectiveProperties,
 } from '../types';
 import { BaseAdapter } from './base.adapter';
-import { NotionTitle } from '../types/notion-property';
+import { NotionTitle } from '../types';
 
 @Injectable({
   providedIn: 'root',

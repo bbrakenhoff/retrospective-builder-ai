@@ -16,7 +16,7 @@ import { DateTime } from 'luxon';
   providedIn: 'root',
 })
 export class RetrospectiveElementAdapter extends BaseAdapter {
-  fromNotionResponse(
+  mapNotionResponseToRetrospectives(
     notionResponse: NotionQueryResponse
   ): RetrospectiveElement[] {
     if (!notionResponse?.results) {
@@ -24,11 +24,13 @@ export class RetrospectiveElementAdapter extends BaseAdapter {
     }
 
     return notionResponse.results.map((item: NotionPage) =>
-      this.fromNotionPage(item)
+      this.mapNotionPageToRetrospective(item)
     );
   }
 
-  private fromNotionPage(notionPage: NotionPage): RetrospectiveElement {
+  private mapNotionPageToRetrospective(
+    notionPage: NotionPage
+  ): RetrospectiveElement {
     const properties =
       notionPage.properties as NotionRetrospectiveElementProperties;
 

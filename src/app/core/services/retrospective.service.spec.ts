@@ -8,7 +8,7 @@ import { testDataStore } from '../../../testing/test-data-store';
 
 describe('RetrospectiveService', () => {
   const testData = {
-    initialRetrospectives: testDataStore.getRetrospectives({
+    initialRetrospectivesRefOnly: testDataStore.getRetrospectives({
       startIndex: 0,
       endIndex: 4,
     }),
@@ -17,7 +17,9 @@ describe('RetrospectiveService', () => {
       endIndex: 4,
       full: true,
     }),
-    reloadedRetrospectives: testDataStore.getRetrospectives({ startIndex: 4 }),
+    reloadedRetrospectivesRefOnly: testDataStore.getRetrospectives({
+      startIndex: 4,
+    }),
     reloadedRetrospectivesFull: testDataStore.getRetrospectives({
       startIndex: 4,
       full: true,
@@ -41,8 +43,8 @@ describe('RetrospectiveService', () => {
       'getRetrospectiveElements$',
     ]);
     notionServiceSpy.getRetrospectives$.and.returnValues(
-      of(testData.initialRetrospectives),
-      of(testData.reloadedRetrospectives)
+      of(testData.initialRetrospectivesRefOnly),
+      of(testData.reloadedRetrospectivesRefOnly)
     );
     notionServiceSpy.getRetrospectiveElements$.and.returnValue(
       of(testData.retrospectiveElements)
@@ -120,11 +122,11 @@ describe('RetrospectiveService', () => {
         service.reload();
 
         expectObservable(replayResults$).toEqual(
-          cold('l', { l: testData.initialRetrospectivesFull })
+          cold('a', { a: testData.initialRetrospectivesFull })
         );
 
         expectObservable(replayIsLoading$$).toEqual(
-          cold('(ilc)', { i: false, l: true, c: false })
+          cold('(abc)', { a: false, b: true, c: false })
         );
 
         expect(notionServiceSpy.getRetrospectives$).toHaveBeenCalledTimes(1);
@@ -135,7 +137,7 @@ describe('RetrospectiveService', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         notionServiceSpy.getRetrospectives$.and.returnValues(
           cold('(---a)', { a: [] }),
-          cold('(---b)', { b: testData.reloadedRetrospectives })
+          cold('(---b)', { b: testData.reloadedRetrospectivesRefOnly })
         );
 
         const replayIsLoading$$ = new ReplaySubject<boolean>();
@@ -158,7 +160,7 @@ describe('RetrospectiveService', () => {
       testScheduler.run(({ expectObservable, cold }) => {
         notionServiceSpy.getRetrospectives$.and.returnValues(
           of([]),
-          of(testData.reloadedRetrospectives)
+          of(testData.reloadedRetrospectivesRefOnly)
         );
 
         const replayIsLoading$$ = new ReplaySubject<boolean>();

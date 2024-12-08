@@ -8,11 +8,13 @@ import { testDataStore } from '../../../testing/test-data-store';
 import { environment } from '../../../environments/environment.test';
 import { of } from 'rxjs';
 
-fdescribe('NotionService', () => {
+describe('NotionService', () => {
   const testData = {
     elementsQueryResponse:
       testDataStore.getRetrospectiveElementsQueryResponse(),
     elements: testDataStore.getRetrospectiveElements(),
+    retrospectivesQueryResponse: testDataStore.getRetrospectivesQueryResponse(),
+    retrospectives: testDataStore.getRetrospectives(),
   };
 
   let notionDatabasesSpy: any;
@@ -31,22 +33,32 @@ fdescribe('NotionService', () => {
 
     notionDatabasesSpy = jasmine.createSpyObj<any>('databases', ['query']);
     // @ts-ignore
+    notionDatabasesSpy.query.and.callFake(({ database_id }) => {
+      if (database_id === environment.notion.databases.retrospectiveElements) {
+        return of(testData.elementsQueryResponse);
+      } else if (database_id === environment.notion.databases.retrospectives) {
+        return of(testData.retrospectivesQueryResponse);
+      }
 
+      return 'wrong database id';
+    });
     notion = jasmine.createSpyObj<Client>('Client', [], {
       databases: notionDatabasesSpy,
     });
     retrospectiveElementAdapterSpy =
       jasmine.createSpyObj<RetrospectiveElementAdapter>(
         'RetrospectiveElementAdapter',
-        ['fromNotionResponse']
+        ['mapNotionResponseToRetrospectives']
       );
-    retrospectiveElementAdapterSpy.fromNotionResponse.and.callFake(() => {
-      console.log(`🩷Bijoya - notion.service.spec.ts > in de spy`);
-      return testData.elements;
-    });
+    retrospectiveElementAdapterSpy.mapNotionResponseToRetrospectives.and.returnValues(
+      testData.elements
+    );
     retrospectiveAdapterSpy = jasmine.createSpyObj<RetrospectiveAdapter>(
       'RetrospectiveAdapter',
       ['mapNotionResponseToRetrospectives']
+    );
+    retrospectiveAdapterSpy.mapNotionResponseToRetrospectives.and.returnValue(
+      testData.retrospectives
     );
 
     TestBed.configureTestingModule({
@@ -68,20 +80,46 @@ fdescribe('NotionService', () => {
 
   describe('getRetrospectiveElements$()', () => {
     it('should get retrospective elements', () => {
-      testScheduler.run(({ expectObservable, cold }) => {
-        // @ts-ignore
-        notionDatabasesSpy.query.and.callFake(({ database_id }) => {
-          if (
-            database_id === environment.notion.databases.retrospectiveElements
-          ) {
-            return of(testData.elementsQueryResponse);
-          }
-
-          return 'wrong database id';
-        });
+      testScheduler.run(({ expectObservable, cold, flush }) => {
         expectObservable(service.getRetrospectiveElements$()).toEqual(
           cold('(r|)', { r: testData.elements })
         );
+
+        flush();
+
+        expect(notionDatabasesSpy.query).toHaveBeenCalledTimes(1);
+        expect(notionDatabasesSpy.query).toHaveBeenCalledWith({
+          database_id: environment.notion.databases.retrospectiveElements,
+        });
+        expect(
+          retrospectiveElementAdapterSpy.mapNotionResponseToRetrospectives
+        ).toHaveBeenCalledTimes(1);
+        expect(
+          retrospectiveElementAdapterSpy.mapNotionResponseToRetrospectives
+        ).toHaveBeenCalledWith(testData.elementsQueryResponse);
+      });
+    });
+  });
+
+  describe('getRetrospectives$()', () => {
+    it('should get retrospectives', () => {
+      testScheduler.run(({ expectObservable, cold, flush }) => {
+        expectObservable(service.getRetrospectives$()).toEqual(
+          cold('(r|)', { r: testData.retrospectives })
+        );
+
+        flush();
+
+        expect(notionDatabasesSpy.query).toHaveBeenCalledTimes(1);
+        expect(notionDatabasesSpy.query).toHaveBeenCalledWith({
+          database_id: environment.notion.databases.retrospectives,
+        });
+        expect(
+          retrospectiveAdapterSpy.mapNotionResponseToRetrospectives
+        ).toHaveBeenCalledTimes(1);
+        expect(
+          retrospectiveAdapterSpy.mapNotionResponseToRetrospectives
+        ).toHaveBeenCalledWith(testData.retrospectivesQueryResponse);
       });
     });
   });
