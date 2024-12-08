@@ -4,7 +4,7 @@ import { TestScheduler } from 'rxjs/internal/testing/TestScheduler';
 import { Retrospective } from '../models';
 import { NotionService } from './notion.service';
 import { RetrospectiveService } from './retrospective.service';
-import { testDataStore } from '../../../testing/test-data-store';
+import { testDataStore } from '../../../test/test-data-store';
 
 describe('RetrospectiveService', () => {
   const testData = {

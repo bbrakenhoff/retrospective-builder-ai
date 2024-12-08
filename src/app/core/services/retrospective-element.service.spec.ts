@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { of, ReplaySubject } from 'rxjs';
 import { TestScheduler } from 'rxjs/internal/testing/TestScheduler';
-import { testDataStore } from '../../../testing/test-data-store';
+import { testDataStore } from '../../../test/test-data-store';
 import { RetrospectiveElement } from '../models';
 import { NotionService } from './notion.service';
 import { RetrospectiveElementService } from './retrospective-element.service';

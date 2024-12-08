@@ -4,7 +4,7 @@ import { RetrospectiveElementAdapter } from '../adapters/retrospective-element.a
 import { RetrospectiveAdapter } from '../adapters/retrospective.adapter';
 import { Client } from '@notionhq/client';
 import { TestScheduler } from 'rxjs/internal/testing/TestScheduler';
-import { testDataStore } from '../../../testing/test-data-store';
+import { testDataStore } from '../../../test/test-data-store';
 import { environment } from '../../../environments/environment.test';
 import { of } from 'rxjs';
 
