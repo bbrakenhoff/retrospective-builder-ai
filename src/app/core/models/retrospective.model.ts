@@ -8,7 +8,7 @@ export interface Retrospective {
   sprint: string | null;
   team: string | null;
   date: DateTime | null;
-  url: string;
+  // url: string;
 
   // Relation fields for different phases
   phases: {

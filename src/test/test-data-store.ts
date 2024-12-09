@@ -4,7 +4,11 @@ import { RetrospectiveStub } from './retrospective.stub';
 import { RetrospectiveElementStub } from './retrospective-element.stub';
 import { testRetrospectiveElements } from './data/retrospective-elements';
 import { testRetrospectives } from './data/retrospectives';
-import { NotionPage, NotionQueryResponse } from '../app/core/types';
+import {
+  NotionPage,
+  NotionQueryResponse,
+  NotionRetrospectiveProperties,
+} from '../app/core/types';
 
 interface TestData {
   retrospectives: { full: RetrospectiveStub[]; refOnly: RetrospectiveStub[] };
@@ -36,13 +40,13 @@ class TestDataStore {
     if (typeof stub === 'string') {
       return {
         id: stub,
-        name: '',
-        theme: '',
-        link: '',
+        name: null,
+        theme: null,
+        link: null,
         attendanceOptions: [],
         phase: [],
-        createdTime: DateTime.now(),
-        lastEditedTime: DateTime.now(),
+        createdTime: null,
+        lastEditedTime: null,
         usedInRetrospectiveIds: [],
       };
     } else {
@@ -70,7 +74,7 @@ class TestDataStore {
     }
     options.startIndex = options.startIndex ?? 0;
     options.endIndex =
-      options.endIndex ?? this.testData.retrospectives.refOnly.length / 2 - 1;
+      options.endIndex ?? this.testData.retrospectives.refOnly.length;
     options.full = options.full ?? false;
 
     const retrospectives = options.full
@@ -86,10 +90,10 @@ class TestDataStore {
       id: stub.id,
       sprint: stub.sprint,
       team: stub.team,
-      date: stub.date ? DateTime.fromISO(stub.date, { zone: 'utc' }) : null,
-      url: stub.url,
-      createdTime: DateTime.fromISO(stub.createdTime, { zone: 'utc' }),
-      lastEditedTime: DateTime.fromISO(stub.lastEditedTime, { zone: 'utc' }),
+      date: stub.date !== null ? DateTime.fromISO(stub.date) : null,
+      // url: stub.url,
+      createdTime: DateTime.fromISO(stub.createdTime),
+      lastEditedTime: DateTime.fromISO(stub.lastEditedTime),
       phases: {
         setTheStage:
           stub.phases.setTheStage !== null
@@ -164,14 +168,44 @@ class TestDataStore {
   ): NotionPage {
     return {
       id: stub.id,
-      created_time: DateTime.now().toISO(),
-      last_edited_time: DateTime.now().toISO(),
+      created_time: stub.createdTime,
+      last_edited_time: stub.lastEditedTime,
       url: `http://test.notion/${stub.id}`,
-      properties: {
-        // Map properties from RetrospectiveStub to NotionPage properties
-        Name: stub.sprint
-          ? { title: [{ text: { content: stub.sprint } }] }
-          : undefined,
+      properties: this.mapRetrospectiveStubToNotionProperties(stub),
+    };
+  }
+  private mapRetrospectiveStubToNotionProperties(
+    stub: RetrospectiveStub
+  ): NotionRetrospectiveProperties {
+    return {
+      // Map properties from RetrospectiveStub to NotionPage properties
+      Sprint: { title: [{ plain_text: stub.sprint }] },
+      Team: { select: { name: stub.team } },
+      Date: stub.date ? { date: { start: stub.date } } : undefined,
+      'Set the Stage': {
+        relation: stub.phases.setTheStage
+          ? [{ id: stub.phases.setTheStage as string }]
+          : [],
+      },
+      'Gather data': {
+        relation: stub.phases.gatherData
+          ? [{ id: stub.phases.gatherData as string }]
+          : [],
+      },
+      'Generate insights': {
+        relation: stub.phases.generateInsights
+          ? [{ id: stub.phases.generateInsights as string }]
+          : [],
+      },
+      'Decide what to do': {
+        relation: stub.phases.decideWhatToDo
+          ? [{ id: stub.phases.decideWhatToDo as string }]
+          : [],
+      },
+      Closing: {
+        relation: stub.phases.closing
+          ? [{ id: stub.phases.closing as string }]
+          : [],
       },
     };
   }

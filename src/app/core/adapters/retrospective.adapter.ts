@@ -37,8 +37,6 @@ export class RetrospectiveAdapter extends BaseAdapter {
       team: this.extractText(properties.Team?.select?.name ?? ''),
       date: this.extractDate(properties.Date?.date?.start),
 
-      url: notionPage.url,
-
       // Phase relations
       phases: {
         setTheStage: this.extractRetrospectiveElement(
@@ -61,18 +59,22 @@ export class RetrospectiveAdapter extends BaseAdapter {
   }
 
   private extractRetrospectiveElement(
-    relation: NotionRelation[] = []
-  ): RetrospectiveElement {
-    return {
-      id: this.extractRelation(relation)[0],
-      createdTime: null,
-      lastEditedTime: null,
-      theme: '',
-      phase: [],
-      name: '',
-      link: '',
-      attendanceOptions: [],
-      usedInRetrospectiveIds: [],
-    };
+    relation: NotionRelation[] | null = null
+  ): RetrospectiveElement | null {
+    if (relation && relation.length > 0) {
+      return {
+        id: this.extractRelation(relation)[0],
+        createdTime: null,
+        lastEditedTime: null,
+        theme: null,
+        phase: [],
+        name: null,
+        link: null,
+        attendanceOptions: [],
+        usedInRetrospectiveIds: [],
+      };
+    }
+
+    return null;
   }
 }

@@ -1,7 +1,7 @@
 import { RetrospectiveElementAdapter } from './retrospective-element.adapter';
 import { testDataStore } from '../../../test/test-data-store';
 
-fdescribe('RetrospectiveElementAdapter', () => {
+describe('RetrospectiveElementAdapter', () => {
   const testData = {
     notionQueryResponse: testDataStore.getRetrospectiveElementsQueryResponse(),
     retrospectiveElements: testDataStore.getRetrospectiveElements(),

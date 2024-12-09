@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { RetrospectiveElementStub } from './retrospective-element.stub';
 
 export interface RetrospectiveStub {
@@ -6,7 +5,6 @@ export interface RetrospectiveStub {
   sprint: string;
   team: string;
   date: string | null;
-  url: string;
   phases: {
     setTheStage: RetrospectiveElementStub | string | null;
     gatherData: RetrospectiveElementStub | string | null;

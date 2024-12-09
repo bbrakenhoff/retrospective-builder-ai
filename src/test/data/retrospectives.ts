@@ -10,7 +10,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 1',
       team: 'Team Gryffindor',
       date: '2024-12-01',
-      url: 'https://retrospective1.com',
+      // url: 'https://retrospective1.com',
       phases: {
         setTheStage: {
           id: 'setTheStage1',
@@ -71,7 +71,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 2',
       team: 'Team Hufflepuff',
       date: null,
-      url: 'https://retrospective2.com',
+      // url: 'https://retrospective2.com',
       phases: {
         setTheStage: null,
         gatherData: null,
@@ -87,7 +87,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 3',
       team: 'Team Ravenclaw',
       date: '2024-12-03',
-      url: 'https://retrospective3.com',
+      // url: 'https://retrospective3.com',
       phases: {
         setTheStage: {
           id: 'setTheStage2',
@@ -139,7 +139,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 4',
       team: 'Team Slytherin',
       date: '2024-12-04',
-      url: 'https://retrospective4.com',
+      // url: 'https://retrospective4.com',
       phases: {
         setTheStage: null,
         gatherData: {
@@ -191,7 +191,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 5',
       team: 'Team Lumos',
       date: null,
-      url: 'https://retrospective5.com',
+      // url: 'https://retrospective5.com',
       phases: {
         setTheStage: {
           id: 'setTheStage3',
@@ -243,7 +243,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 6',
       team: 'Team Patronus',
       date: '2024-12-06',
-      url: 'https://retrospective6.com',
+      // url: 'https://retrospective6.com',
       phases: {
         setTheStage: {
           id: 'setTheStage4',
@@ -295,7 +295,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 7',
       team: 'Team Accio',
       date: '2024-12-07',
-      url: 'https://retrospective7.com',
+      // url: 'https://retrospective7.com',
       phases: {
         setTheStage: {
           id: 'setTheStage3',
@@ -349,7 +349,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 1',
       team: 'Team Gryffindor',
       date: '2024-12-01',
-      url: 'https://retrospective1.com',
+      // url: 'https://retrospective1.com',
       phases: {
         setTheStage: 'setTheStage1',
         gatherData: 'gatherData2',
@@ -365,7 +365,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 2',
       team: 'Team Hufflepuff',
       date: null,
-      url: 'https://retrospective2.com',
+      // url: 'https://retrospective2.com',
       phases: {
         setTheStage: null,
         gatherData: null,
@@ -381,7 +381,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 3',
       team: 'Team Ravenclaw',
       date: '2024-12-03',
-      url: 'https://retrospective3.com',
+      // url: 'https://retrospective3.com',
       phases: {
         setTheStage: 'setTheStage2',
         gatherData: 'gatherData3',
@@ -397,7 +397,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 4',
       team: 'Team Slytherin',
       date: '2024-12-04',
-      url: 'https://retrospective4.com',
+      // url: 'https://retrospective4.com',
       phases: {
         setTheStage: null,
         gatherData: 'gatherData1',
@@ -413,7 +413,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 5',
       team: 'Team Lumos',
       date: null,
-      url: 'https://retrospective5.com',
+      // url: 'https://retrospective5.com',
       phases: {
         setTheStage: 'setTheStage3',
         gatherData: 'gatherData4',
@@ -429,7 +429,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 6',
       team: 'Team Patronus',
       date: '2024-12-06',
-      url: 'https://retrospective6.com',
+      // url: 'https://retrospective6.com',
       phases: {
         setTheStage: 'setTheStage4',
         gatherData: null,
@@ -445,7 +445,7 @@ export const testRetrospectives: {
       sprint: 'Sprint 7',
       team: 'Team Accio',
       date: '2024-12-07',
-      url: 'https://retrospective7.com',
+      // url: 'https://retrospective7.com',
       phases: {
         setTheStage: 'setTheStage3',
         gatherData: 'gatherData1',

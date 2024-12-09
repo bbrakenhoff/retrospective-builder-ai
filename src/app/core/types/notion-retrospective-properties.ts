@@ -1,9 +1,11 @@
 import { NotionRelation } from './notion-relation';
+import { NotionSelect, NotionTitle } from './notion-property';
+import { NotionDate } from './notion-date';
 
 export interface NotionRetrospectiveProperties {
-  Sprint?: { title: [{ plain_text: string }] };
-  Team?: { select: { name: string } };
-  Date?: { date: { start: string } };
+  Sprint?: NotionTitle;
+  Team?: NotionSelect;
+  Date?: NotionDate;
   'Set the Stage'?: { relation: NotionRelation[] };
   'Gather data'?: { relation: NotionRelation[] };
   'Generate insights'?: { relation: NotionRelation[] };
