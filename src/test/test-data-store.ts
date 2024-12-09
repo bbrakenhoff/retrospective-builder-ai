@@ -128,7 +128,7 @@ class TestDataStore {
 
   private mapRetrospectiveElementStubToNotionPage(
     stub: RetrospectiveElementStub
-  ) {
+  ): NotionPage {
     return {
       id: stub.id,
       created_time: DateTime.now().toISO(),
@@ -136,16 +136,18 @@ class TestDataStore {
       url: `http://test.notion/${stub.id}`,
       properties: {
         Theme: stub.theme ? { select: { name: stub.theme } } : undefined,
-        Phase: stub.phase ? { multi_select: stub.phase } : undefined,
-        Name: stub.name
-          ? { title: [{ text: { content: stub.name } }] }
-          : undefined,
-        Link: stub.link
-          ? { rich_text: [{ text: { content: stub.link } }] }
-          : undefined,
+        Phase: stub.phase
+          ? { multi_select: stub.phase.map(phase => ({ name: phase })) }
+          : [],
+        Name: stub.name ? { title: [{ plain_text: stub.name }] } : undefined,
+        Link: stub.link ? { rich_text: [{ plain_text: stub.link }] } : null,
         'Attendance options': stub.attendanceOptions
-          ? { multi_select: stub.attendanceOptions }
-          : undefined,
+          ? {
+              multi_select: stub.attendanceOptions.map(option => ({
+                name: option,
+              })),
+            }
+          : [],
       },
     };
   }

@@ -5,8 +5,8 @@ export interface Retrospective {
   id: string;
   createdTime: DateTime;
   lastEditedTime: DateTime;
-  sprint: string;
-  team: string;
+  sprint: string | null;
+  team: string | null;
   date: DateTime | null;
   url: string;
 

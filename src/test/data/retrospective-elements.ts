@@ -26,7 +26,7 @@ export const testRetrospectiveElements: RetrospectiveElementStub[] = [
     id: 'setTheStage3',
     name: 'Disney Quote Guessing Game',
     theme: 'Disney',
-    link: 'https://www.disney.com',
+    link: null,
     attendanceOptions: ['Offline'],
     phase: ['setTheStage'],
     instruction:

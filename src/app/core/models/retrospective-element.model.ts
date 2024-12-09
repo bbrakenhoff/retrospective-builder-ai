@@ -6,7 +6,7 @@ export interface RetrospectiveElement {
   lastEditedTime: DateTime | null;
   theme: string | null;
   phase: string[];
-  name: string;
+  name: string | null;
   link: string | null;
   attendanceOptions: string[];
   usedInRetrospectiveIds: string[];

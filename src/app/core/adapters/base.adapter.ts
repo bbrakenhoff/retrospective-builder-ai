@@ -1,13 +1,14 @@
 import { DateTime } from 'luxon';
-import { NotionRelation } from '../types';
-import { NotionMultiSelect, NotionRichText } from '../types/notion-property';
+import { NotionMultiSelect, NotionRelation, NotionRichText } from '../types';
 
 export abstract class BaseAdapter {
-  protected extractText(value: string): string {
-    return value || '';
+  protected extractText(value: string | null): string | null {
+    return value || null;
   }
-  protected extractRichText(richText: NotionRichText | undefined): string {
-    return richText?.rich_text?.[0]?.plain_text ?? '';
+  protected extractRichText(
+    richText: NotionRichText | undefined
+  ): string | null {
+    return richText?.rich_text?.[0]?.plain_text ?? null;
   }
 
   protected extractDate(
@@ -34,7 +35,7 @@ export abstract class BaseAdapter {
 
   protected extractTitle(
     titleProperty: { title: { plain_text: string }[] } | undefined
-  ): string {
-    return titleProperty?.title?.[0]?.plain_text ?? '';
+  ): string | null {
+    return titleProperty?.title?.[0]?.plain_text ?? null;
   }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { RetrospectiveElement } from '../models/retrospective-element.model';
 import {
   NotionMultiSelect,
   NotionPage,
@@ -11,6 +10,7 @@ import {
 
 import { BaseAdapter } from './base.adapter';
 import { DateTime } from 'luxon';
+import { RetrospectiveElement } from '../models';
 
 @Injectable({
   providedIn: 'root',
